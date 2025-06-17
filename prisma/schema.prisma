@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  SUPERADMIN
+}
+
+enum GENDER {
+  MALE
+  FEMALE
+}
+
+model Admins {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(255)
+  username String @unique @db.VarChar(255)
+  password String @db.Text
+  phone String @unique @db.VarChar(20)
+  role Role
+  image String? @db.Text
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt() @db.Timestamp(6)
+}
+
+model Workers {
+  id Int @id @default(autoincrement())
+  fullname String @db.VarChar(400)
+  position String @db.VarChar(200)
+  salary Int @db.Integer()
+  phone String @unique @db.VarChar(20)
+  age Int @db.Integer()
+  gender GENDER
+  passport String @db.VarChar(255)
+  image String? @db.Text
+  face_encoding Json? @db.JsonB
+  is_active Boolean @db.Boolean
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt() @db.Timestamp(6)
+  attendance Attendance[]
+}
+
+model Attendance {
+  id Int @id @default(autoincrement())
+  workerId Int
+  worker Workers @relation(fields: [workerId], references: [id])
+  date DateTime @db.Date
+  clock_in DateTime @db.Time()
+  clock_out DateTime @db.Time()
+  late_minutes Int @db.Integer
+  early_leave Int @db.Integer
+  worked_hours Int @db.Integer
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
+}
