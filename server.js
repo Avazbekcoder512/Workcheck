@@ -1,10 +1,16 @@
 import express from "express";
 import { PORT } from "./config/config.js";
 import cors from "cors";
+import { appRouter } from "./router/router.js";
 
 const app = express();
 
 app.use(cors());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+appRouter(app);
 
 app.use((error, req, res, next) => {
   console.log(error);
@@ -13,10 +19,6 @@ app.use((error, req, res, next) => {
     error: "Serverda ichki xatolik!",
   });
 });
-
-
-
-
 
 const Port = PORT || 3000;
 app.listen(Port, () => {

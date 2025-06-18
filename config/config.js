@@ -1,8 +1,8 @@
 import { config } from "dotenv";
 config();
 
-export const PORT = process.env.PORT;
+const PORT = process.env.PORT;
+const CRYPTO_KEY = process.env.CRYPTO_KEY;
+const ALGORITHM = process.env.ALGORITHM;
 
-// module.exports = {
-//   PORT,
-// };
+export { PORT, CRYPTO_KEY, ALGORITHM };
