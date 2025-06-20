@@ -1,16 +1,18 @@
 import express from "express";
-import { PORT } from "./config/config.js";
+import { FRONTEND_URL_1, FRONTEND_URL_2, FRONTEND_URL_3, PORT } from "./config/config.js";
 import cors from "cors";
 import { appRouter } from "./router/router.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://dashboard.atr.uz'],
+  origin: [FRONTEND_URL_1, FRONTEND_URL_2, FRONTEND_URL_3],
   credentials: true
 }));
 
 app.use(express.json());
+app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }));
 
 appRouter(app);

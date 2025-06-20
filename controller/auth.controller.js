@@ -17,7 +17,7 @@ const authentication = async (req, res) => {
 
         const { username, password } = value
 
-        const admin = await prisma.admins.findUnique({
+        const admin = await prisma.admins.findFirst({
             where: {
                 username
             }
@@ -45,6 +45,9 @@ const authentication = async (req, res) => {
             createdTime: new Date().getTime(),
             expiredTime: EXPIREDTIME
         })
+
+        console.log(token);
+
 
         res.cookie('token', token, {
             httpOnly: true,
@@ -74,18 +77,20 @@ const indetification = async (req, res, next) => {
     }
 
     const decode = cryptoManeger.token.verify(token)
+    console.log(decode);
 
-    if (!decode) {
+
+    if (!decode === undefined) {
         return res.status(403).send({
             success: false,
             error: "Forbidden error!"
         })
     }
 
-    if (decode.role !== "ADMIN" || decode.role !== "SUPERADMIN") {
+    if (decode.role !== "ADMIN" && decode.role !== "SUPERADMIN") {
         return res.status(403).send({
             success: false,
-            error: "Sizga ruxsat yoʻq!"
+            error: "Forbidden error!"
         })
     }
 
@@ -104,9 +109,10 @@ const indetification = async (req, res, next) => {
     }
 
     if (decode.id) {
+        const id = Number(decode.id)
         const admin = await prisma.admins.findFirst({
             where: {
-                id: decode.id
+                id
             }
         })
 
@@ -127,19 +133,22 @@ const indetification = async (req, res, next) => {
     next()
 }
 
-const authorizotion = (...roles) => {
-    try {
-        return (req, res, next) => {
-            if (!roles.includes(req.user.role)) {
+const authorization = (...roles) => {
+    return (req, res, next) => {
+        try {
+            const { role } = req.user
+            console.log(role);
+            
+            if (!roles.includes(role)) {
                 return res.status(403).send({
                     success: false,
                     error: "Sizga ruxsat yoʻq"
                 })
             }
             next()
+        } catch (error) {
+            throw error
         }
-    } catch (error) {
-        throw error
     }
 }
 
@@ -156,4 +165,4 @@ const logout = (req, res) => {
     }
 }
 
-export { authentication, indetification, authorizotion, logout }
+export { authentication, indetification, authorization, logout }
