@@ -1,8 +1,6 @@
-import { PrismaClient } from "../generated/prisma/index.js";
 import { cryptoManeger } from "../helper/crypto.js";
 import { AdminCreateSchema } from "../validator/adminValidator/createValidate.js";
-
-const prisma = new PrismaClient();
+import prisma from '../prisma/setup.js'
 
 export const adminCreate = async (req, res) => {
   try {
