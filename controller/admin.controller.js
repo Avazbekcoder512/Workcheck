@@ -66,6 +66,29 @@ export const getAllAdmins = async (req, res) => {
   }
 };
 
+export const getOneAdmin = async (req, res) => {
+  try {
+    const id = Number(req.params.id)
+
+    const admin = await prisma.admins.findFirst({ where: { id } })
+
+    if (!admin) {
+      return res.status(404).send({
+        success: false,
+        error: "Admin topilmadi!"
+      })
+    }
+
+    return res.status(200).send({
+      success: true,
+      error: false,
+      admin
+    })
+  } catch (error) {
+    throw error
+  }
+}
+
 export const updateAdmin = async (req, res) => {
   try {
     const id = Number(req.params.id)
