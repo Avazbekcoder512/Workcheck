@@ -6,7 +6,7 @@ export const cryptoManeger = {
   refresh: {
     generate: payload => {
       const string = (new URLSearchParams(payload)).toString()
-      const iv = crypto.randomBytes(16).toString('hex')
+      const iv = crypto.randomBytes(8).toString('hex')
       const cipher = crypto.createCipheriv(ALGORITHM, REFRESH_KEY, iv)
       let encrypted = cipher.update(string, 'utf-8', 'hex')
       encrypted += cipher.final('hex')
