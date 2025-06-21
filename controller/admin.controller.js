@@ -1,6 +1,7 @@
 import { cryptoManeger } from "../helper/crypto.js";
 import { AdminCreateSchema } from "../validator/adminValidator/createValidate.js";
 import prisma from '../prisma/setup.js'
+import { updateAdminSchema } from "../validator/adminValidator/updateValidate.js";
 
 export const adminCreate = async (req, res) => {
   try {
@@ -63,3 +64,75 @@ export const getAllAdmins = async (req, res) => {
     throw error;
   }
 };
+
+export const updateAdmin = async (req, res) => {
+  try {
+    const id = Number(req.params.id)
+
+    const admin = await prisma.admins.findFirst({
+      where: {
+        id
+      }
+    })
+
+    if (!admin) {
+      return res.status(404).send({
+        success: false,
+        error: "Admin topilmadi!"
+      })
+    }
+
+    const { error, value } = updateAdminSchema.validate(req.body, { abortEarly: false })
+
+    if (error) {
+      return res.status(400).send({
+        success: false,
+        error: error.details[0].message,
+      });
+    }
+
+    const updatedAdmin = await prisma.admins.update({
+      where: {
+        id
+      },
+      data: value
+    })
+
+    return res.status(200).send({
+      success: true,
+      error: false,
+      message: 'Admin ma\'lumotlari muvaffaqiyatli yangilandi!'
+    })
+  } catch (error) {
+    throw error
+  }
+}
+
+export const deleteAdmin = async (req, res) => {
+  try {
+    const id = Number(req.params.id)
+
+    const admin = await prisma.admins.findFirst({
+      where: id
+    })
+
+    if (!admin) {
+      return res.status(404).send({
+        success: false,
+        error: "Admin topilmadi!"
+      })
+    }
+
+    await prisma.admins.delete({
+      where: id
+    })
+
+    return res.status(200).send({
+      success: true,
+      error: false,
+      message: "Admin muvaffaqiyatli o'chirildi!"
+    })
+  } catch (error) {
+    throw error
+  }
+}
