@@ -15,3 +15,12 @@ export const loginSchema = Joi.object({
         'any.required': 'Parol majburiy maydon!'
     }),
 })
+
+export const updatePassSchema = Joi.object({
+    password: Joi.string().min(8).max(15).trim().required().messages({
+        'string.base': 'Parol faqat matn boʻlishi kerak',
+        'string.min': 'Parol kamida {#limit} ta belgidan iborat boʻlishi kerak!',
+        'string.max': 'Parol eng koʻpi bilan {#limit} ta belgidan iborat boʻlishi kerak!',
+        'any.required': 'Parol majburiy maydon!'
+    })
+})

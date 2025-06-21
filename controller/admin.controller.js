@@ -2,6 +2,7 @@ import { cryptoManeger } from "../helper/crypto.js";
 import { AdminCreateSchema } from "../validator/adminValidator/createValidate.js";
 import prisma from '../prisma/setup.js'
 import { updateAdminSchema } from "../validator/adminValidator/updateValidate.js";
+import { updatePassSchema } from "../validator/authValidator/authValidate.js";
 
 export const adminCreate = async (req, res) => {
   try {
@@ -34,7 +35,7 @@ export const adminCreate = async (req, res) => {
       data: { name, username, password: passwordHash, phone, role },
     });
 
-    return res.status(200).send({
+    return res.status(201).send({
       success: true,
       error: false,
       message: "Admin muvaffaqiyatli yaratildi!",
@@ -98,10 +99,49 @@ export const updateAdmin = async (req, res) => {
       data: value
     })
 
-    return res.status(200).send({
+    return res.status(201).send({
       success: true,
       error: false,
       message: 'Admin ma\'lumotlari muvaffaqiyatli yangilandi!'
+    })
+  } catch (error) {
+    throw error
+  }
+}
+
+export const updatePassword = async (req, res) => {
+  try {
+    const id = Number(req.params.id)
+
+    const admin = await prisma.admins.findFirst({ where: { id } })
+
+    if (!admin) {
+      return res.status(404).send({
+        success: false,
+        error: "Admin topilmadi!"
+      })
+    }
+
+    const { error, value } = updatePassSchema.validate(req.body, { abortEarly: false })
+
+    if (error) {
+      return res.status(400).send({
+        success: false,
+        error: error.details[0].message,
+      });
+    }
+
+    const passwordHash = await cryptoManeger.pass.hash(value.password)
+
+    await prisma.admins.update({
+      where: { id },
+      data: { password: passwordHash }
+    })
+
+    return res.status(201).send({
+      success: true,
+      error: false,
+      message: "Parol muvaffaqiyatli yangilandi!"
     })
   } catch (error) {
     throw error
