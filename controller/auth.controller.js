@@ -1,4 +1,4 @@
-import { EXPIREDTIME } from "../config/config.js";
+import { EXPIREDTIME, REFRESH_EXPIRED_TIME } from "../config/config.js";
 import { cryptoManeger } from "../helper/crypto.js";
 import prisma from "../prisma/setup.js";
 import { loginSchema } from "../validator/authValidator/authValidate.js";
@@ -39,6 +39,13 @@ const authentication = async (req, res) => {
             })
         }
 
+        const refreshToken = cryptoManeger.refresh.generate({
+            id: admin.id,
+            role: admin.role,
+            createdTime: new Date().getTime(),
+            expiredTime: REFRESH_EXPIRED_TIME
+        })
+
         const token = cryptoManeger.token.generate({
             id: admin.id,
             role: admin.role,
@@ -47,13 +54,18 @@ const authentication = async (req, res) => {
         })
 
         console.log(token);
-
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "Strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
 
         res.cookie('token', token, {
             httpOnly: true,
             secure: false,
             sameSite: "Strict",
-            maxAge: 24 * 60 * 60 * 1000
+            maxAge: 2 * 60 * 60 * 1000
         })
 
         return res.status(200).send({
@@ -66,8 +78,96 @@ const authentication = async (req, res) => {
     }
 };
 
+const refresh = async (req, res) => {
+    try {
+        const refreshToken = req.cookie.refreshToken;
+
+        if (!refreshToken) {
+            return res.status(403).send({
+                success: false,
+                error: "Refresh token mavjud emas!"
+            })
+        }
+
+        const decoded = cryptoManeger.refresh.verify(refreshToken)
+
+        if (!decoded === undefined) {
+            return res.status(403).send({
+                success: false,
+                error: "Forbidden error!"
+            })
+        }
+
+        if (decoded.role !== "ADMIN" && decoded.role !== 'SUPERADMIN') {
+            return res.status(403).send({
+                success: false,
+                error: "Forbidden error!"
+            })
+        }
+
+        if (decoded.createdTime && decoded.expiredTime) {
+            if (((new Date().getTime()) - decoded.createdTime) > decoded.expiredTime) {
+                return res.status(401).send({
+                    success: false,
+                    error: "Tokenni vaqti tugagan!"
+                })
+            }
+        } else {
+            return res.status(403).send({
+                success: false,
+                error: "Forbidden error!"
+            })
+        }
+
+        if (decoded.id) {
+            const id = Number(decoded.id)
+            const admin = await prisma.admins.findFirst({
+                where: {
+                    id
+                }
+            })
+
+            if (!admin) {
+                return res.status(403).send({
+                    success: false,
+                    error: "Forbidden error!"
+                })
+            }
+
+            const token = cryptoManeger.token.generate({
+                id: admin.id,
+                role: admin.role,
+                createdTime: new Date().getTime(),
+                expiredTime: EXPIREDTIME
+
+            })
+
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: false,
+                sameSite: "Strict",
+                maxAge: 2 * 60 * 60 * 1000
+            })
+
+            return res.status(200).send({
+                success: true,
+                error: false,
+                message: 'Token muvaffaqiyatli yangilandi!'
+            })
+        } else {
+            return res.status(403).send({
+                success: false,
+                error: "Forbidden error!"
+            })
+        }
+
+    } catch (error) {
+        throw error
+    }
+}
+
 const indetification = async (req, res, next) => {
-    const token = req.cookies?.token;
+    const token = req.cookies.token;
 
     if (!token) {
         return res.status(403).send({
@@ -138,7 +238,7 @@ const authorization = (...roles) => {
         try {
             const { role } = req.user
             console.log(role);
-            
+
             if (!roles.includes(role)) {
                 return res.status(403).send({
                     success: false,
@@ -154,7 +254,17 @@ const authorization = (...roles) => {
 
 const logout = (req, res) => {
     try {
-        res.clearCookie('token')
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'Strict'
+        })        
+
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'Strict'
+        })
 
         return res.status(200).send({
             success: true,
@@ -165,4 +275,4 @@ const logout = (req, res) => {
     }
 }
 
-export { authentication, indetification, authorization, logout }
+export { authentication, refresh, indetification, authorization, logout }
