@@ -47,7 +47,16 @@ export const adminCreate = async (req, res) => {
 
 export const getAllAdmins = async (req, res) => {
   try {
-    const admins = await prisma.admins.findMany();
+    const admins = await prisma.admins.findMany({
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        phone: true,
+        role: true,
+        image: true
+      }
+    });
 
     if (admins.length == 0) {
       return res.status(404).send({
