@@ -53,7 +53,6 @@ const authentication = async (req, res) => {
             expiredTime: EXPIREDTIME
         })
 
-        console.log(token);
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: false,
@@ -172,13 +171,11 @@ const indetification = async (req, res, next) => {
     if (!token) {
         return res.status(403).send({
             success: false,
-            error: "Token majburiy!"
+            error: "Iltimos qayta kirish qiling!"
         })
     }
 
     const decode = cryptoManeger.token.verify(token)
-    console.log(decode);
-
 
     if (!decode === undefined) {
         return res.status(403).send({
@@ -237,7 +234,6 @@ const authorization = (...roles) => {
     return (req, res, next) => {
         try {
             const { role } = req.user
-            console.log(role);
 
             if (!roles.includes(role)) {
                 return res.status(403).send({
@@ -258,7 +254,7 @@ const logout = (req, res) => {
             httpOnly: true,
             secure: false,
             sameSite: 'Strict'
-        })        
+        })
 
         res.clearCookie('token', {
             httpOnly: true,
@@ -275,4 +271,37 @@ const logout = (req, res) => {
     }
 }
 
-export { authentication, refresh, indetification, authorization, logout }
+const profile = async (req, res) => {
+    try {
+        const id = Number(req.user.id)
+
+        const admin = await prisma.admins.findFirst({
+            where: { id },
+            select :{
+                id: true,
+                name: true,
+                username: true,
+                image: true,
+                phone: true,
+                role: true
+            }
+        })
+
+        if (!admin) {
+            return res.status(404).send({
+                success: false,
+                error: 'Admin topilmadi!'
+            })
+        }
+
+        return res.status(200).send({
+            success: true,
+            error: false,
+            admin
+        })
+    } catch (error) {
+        throw error
+    }
+}
+
+export { authentication, refresh, indetification, authorization, profile, logout }
