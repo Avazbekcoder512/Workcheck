@@ -177,7 +177,7 @@ const indetification = async (req, res, next) => {
 
     const decode = cryptoManeger.token.verify(token)
 
-    if (!decode === undefined) {
+    if (decode === undefined) {
         return res.status(403).send({
             success: false,
             error: "Forbidden error!"
@@ -248,6 +248,18 @@ const authorization = (...roles) => {
     }
 }
 
+const checkauth = async (req, res) => {
+    try {
+        return res.status(200).send({
+            success: true,
+            message: "Ok"
+        })
+        
+    } catch (error) {
+        throw error
+    }
+}
+
 const logout = (req, res) => {
     try {
         res.clearCookie('refreshToken', {
@@ -304,4 +316,4 @@ const profile = async (req, res) => {
     }
 }
 
-export { authentication, refresh, indetification, authorization, profile, logout }
+export { authentication, refresh, indetification, authorization, profile, checkauth, logout }
