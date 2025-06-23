@@ -169,7 +169,7 @@ const indetification = async (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
-        return res.status(403).send({
+        return res.status(401).send({
             success: false,
             error: "Iltimos qayta kirish qiling!"
         })
