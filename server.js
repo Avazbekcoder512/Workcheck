@@ -1,5 +1,5 @@
 import express from "express";
-import { FRONTEND_URL_1, FRONTEND_URL_2, FRONTEND_URL_3, PORT } from "./config/config.js";
+import { FRONTEND_URL_1, FRONTEND_URL_2, FRONTEND_URL_3, FRONTEND_URL_4, PORT } from "./config/config.js";
 import cors from "cors";
 import { appRouter } from "./router/router.js";
 import cookieParser from "cookie-parser";
@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 const app = express();
 
 app.use(cors({
-  origin: [FRONTEND_URL_1, FRONTEND_URL_2, FRONTEND_URL_3],
+  origin: [FRONTEND_URL_1, FRONTEND_URL_2, FRONTEND_URL_3, FRONTEND_URL_4],
   credentials: true
 }));
 
