@@ -6,8 +6,8 @@ export const cryptoManeger = {
   refresh: {
     generate: payload => {
       const string = (new URLSearchParams(payload)).toString()
-      const iv = crypto.randomBytes(8).toString('hex')
-      const cipher = crypto.createCipheriv(ALGORITHM, REFRESH_KEY, iv)
+      const iv = crypto.randomBytes(16).toString('hex')
+      const cipher = crypto.createCipheriv(ALGORITHM, REFRESH_KEY, Buffer.from(iv, 'hex'))
       let encrypted = cipher.update(string, 'utf-8', 'hex')
       encrypted += cipher.final('hex')
       return encrypted + ':' + iv
@@ -16,7 +16,7 @@ export const cryptoManeger = {
     verify: (token) => {
       try {
         const [encrypted, iv] = token.split(':')
-        const decipher = crypto.createDecipheriv(ALGORITHM, REFRESH_KEY, iv)
+        const decipher = crypto.createDecipheriv(ALGORITHM, REFRESH_KEY, Buffer.from(iv, 'hex'))
         let decrypt = decipher.update(encrypted, 'hex', 'utf-8')
         decrypt += decipher.final('utf-8')
         return Object.fromEntries(new URLSearchParams(decrypt))
@@ -29,8 +29,8 @@ export const cryptoManeger = {
   token: {
     generate: payload => {
       const string = (new URLSearchParams(payload)).toString();
-      const iv = crypto.randomBytes(8).toString("hex");
-      const cipher = crypto.createCipheriv(ALGORITHM, CRYPTO_KEY, iv);
+      const iv = crypto.randomBytes(16).toString("hex");
+      const cipher = crypto.createCipheriv(ALGORITHM, CRYPTO_KEY, Buffer.from(iv, 'hex'));
       let encrypted = cipher.update(string, "utf-8", "hex");
       encrypted += cipher.final("hex");
       return encrypted + ":" + iv;
@@ -39,7 +39,7 @@ export const cryptoManeger = {
     verify: (token) => {
       try {
         const [encrypted, iv] = token.split(":");
-        const decipher = crypto.createDecipheriv(ALGORITHM, CRYPTO_KEY, iv);
+        const decipher = crypto.createDecipheriv(ALGORITHM, CRYPTO_KEY, Buffer.from(iv, 'hex'));
         let decrypt = decipher.update(encrypted, "hex", "utf-8");
         decrypt += decipher.final("utf-8");
         return Object.fromEntries(new URLSearchParams(decrypt));
