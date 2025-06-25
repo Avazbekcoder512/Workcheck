@@ -55,14 +55,14 @@ const authentication = async (req, res) => {
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite: "Strict",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite: "Strict",
             maxAge: 2 * 60 * 60 * 1000
         })
@@ -254,7 +254,7 @@ const checkauth = async (req, res) => {
             success: true,
             message: "Ok"
         })
-        
+
     } catch (error) {
         throw error
     }
@@ -283,37 +283,4 @@ const logout = (req, res) => {
     }
 }
 
-const profile = async (req, res) => {
-    try {
-        const id = Number(req.user.id)
-
-        const admin = await prisma.admins.findFirst({
-            where: { id },
-            select :{
-                id: true,
-                name: true,
-                username: true,
-                image: true,
-                phone: true,
-                role: true
-            }
-        })
-
-        if (!admin) {
-            return res.status(404).send({
-                success: false,
-                error: 'Admin topilmadi!'
-            })
-        }
-
-        return res.status(200).send({
-            success: true,
-            error: false,
-            admin
-        })
-    } catch (error) {
-        throw error
-    }
-}
-
-export { authentication, refresh, indetification, authorization, profile, checkauth, logout }
+export { authentication, refresh, indetification, authorization, checkauth, logout }

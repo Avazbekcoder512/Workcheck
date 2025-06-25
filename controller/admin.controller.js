@@ -3,6 +3,7 @@ import { AdminCreateSchema } from "../validator/adminValidator/createValidate.js
 import prisma from '../prisma/setup.js'
 import { updateAdminSchema } from "../validator/adminValidator/updateValidate.js";
 import { updatePassSchema } from "../validator/authValidator/authValidate.js";
+import { imageSchema } from "../validator/imageValidator/imageVAlidate.js";
 
 export const adminCreate = async (req, res) => {
   try {
@@ -10,11 +11,27 @@ export const adminCreate = async (req, res) => {
       abortEarly: false,
     });
     if (error) {
+      req.file ? fs.unlinkSync(req.file.path) : false
       return res.status(400).send({
         success: false,
         error: error.details[0].message,
       });
     }
+
+    if (req.file) {
+      const { error, value } = imageSchema.validate(req.file, {
+        abortEarly: false
+      })
+      if (error) {
+        req.file ? fs.unlinkSync(req.file.path) : false
+        return res.status(400).send({
+          success: false,
+          error: error.details[0].message,
+        });
+      }
+    }
+
+    const image = req.file ? req.imageUrl : undefined;
 
     const { name, username, password, phone, role } = value;
 
@@ -32,7 +49,7 @@ export const adminCreate = async (req, res) => {
     const passwordHash = await cryptoManeger.pass.hash(password);
 
     const admin = await prisma.admins.create({
-      data: { name, username, password: passwordHash, phone, role },
+      data: { name, username, password: passwordHash, phone, role, ...(image && { image }) },
     });
 
     return res.status(201).send({
