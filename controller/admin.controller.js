@@ -9,6 +9,7 @@ export const adminCreate = async (req, res) => {
   try {
     const { error, value } = AdminCreateSchema.validate(req.body, {
       abortEarly: false,
+      stripUnknown: true
     });
     if (error) {
       req.file ? fs.unlinkSync(req.file.path) : false
@@ -16,6 +17,13 @@ export const adminCreate = async (req, res) => {
         success: false,
         error: error.details[0].message,
       });
+    }
+
+    if (!value) {
+      return res.status(400).send({
+        success: false,
+        error: 'Iltimos barcha maydonlarni toʻldiring!'
+      })
     }
 
     if (req.file) {
