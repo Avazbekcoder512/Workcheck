@@ -6,7 +6,7 @@ import { authorization } from "../../controller/auth.controller.js"
 const router = express.Router()
 
 router
-    .post('/admin/create', authorization('SUPERADMIN'), /* upload.single('image'), uploadImage, */ adminCreate)
+    .post('/admin/create', authorization('SUPERADMIN', 'ADMIN'), /* upload.single('image'), uploadImage, */ adminCreate)
     .get('/admins', authorization('ADMIN', 'SUPERADMIN'), getAllAdmins)
     .get('/admin/:id', authorization('SUPERADMIN'), getOneAdmin)
     .put('/admin/:id/update', authorization('SUPERADMIN'), updateAdmin)
