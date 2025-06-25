@@ -1,4 +1,4 @@
-import { EXPIREDTIME, REFRESH_EXPIRED_TIME } from "../config/config.js";
+import { EXPIREDTIME, isProduction, REFRESH_EXPIRED_TIME } from "../config/config.js";
 import { cryptoManeger } from "../helper/crypto.js";
 import prisma from "../prisma/setup.js";
 import { loginSchema } from "../validator/authValidator/authValidate.js";
@@ -52,17 +52,17 @@ const authentication = async (req, res) => {
             createdTime: new Date().getTime(),
             expiredTime: EXPIREDTIME
         })
-
+  
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: true,
+            secure: isProduction,
             sameSite: "Strict",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure: true,
+            secure: isProduction,
             sameSite: "Strict",
             maxAge: 2 * 60 * 60 * 1000
         })
