@@ -55,14 +55,14 @@ const authentication = async (req, res) => {
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite: "Strict",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite: "Strict",
             maxAge: 2 * 60 * 60 * 1000
         })
@@ -254,7 +254,7 @@ const checkauth = async (req, res) => {
             success: true,
             message: "Ok"
         })
-        
+
     } catch (error) {
         throw error
     }
