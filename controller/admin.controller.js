@@ -3,7 +3,7 @@ import { AdminCreateSchema } from "../validator/adminValidator/createValidate.js
 import prisma from '../prisma/setup.js'
 import { updateAdminSchema } from "../validator/adminValidator/updateValidate.js";
 import { updatePassSchema } from "../validator/authValidator/authValidate.js";
-import { imageSchema } from "../validator/imageValidator/imageVAlidate.js";
+import { imageSchema } from "../validator/imageValidator/imageValidate.js";
 
 export const adminCreate = async (req, res) => {
   try {
