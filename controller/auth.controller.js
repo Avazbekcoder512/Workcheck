@@ -52,7 +52,7 @@ const authentication = async (req, res) => {
             createdTime: new Date().getTime(),
             expiredTime: EXPIREDTIME
         })
-  
+
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: isProduction,
@@ -60,17 +60,11 @@ const authentication = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: isProduction,
-            sameSite: "Lax",
-            maxAge: 2 * 60 * 60 * 1000
-        })
-
         return res.status(200).send({
             success: true,
             error: false,
-            message: "Kirish muvaffaqiyatli amalga oshirildi!"
+            message: "Kirish muvaffaqiyatli amalga oshirildi!",
+            token
         })
     } catch (error) {
         throw error;
@@ -141,17 +135,11 @@ const refresh = async (req, res) => {
 
             })
 
-            res.cookie('token', token, {
-                httpOnly: true,
-                secure: false,
-                sameSite: "Strict",
-                maxAge: 2 * 60 * 60 * 1000
-            })
-
             return res.status(200).send({
                 success: true,
                 error: false,
-                message: 'Token muvaffaqiyatli yangilandi!'
+                message: 'Token muvaffaqiyatli yangilandi!',
+                token
             })
         } else {
             return res.status(403).send({
@@ -166,7 +154,15 @@ const refresh = async (req, res) => {
 }
 
 const indetification = async (req, res, next) => {
-    const token = req.cookies.token;
+    const authHeader = req.headers['authorization'];
+
+    if (!authHeader) {
+        return res.status(404).send({
+            error: 'Token not found',
+        });
+    }
+
+    const token = authHeader.split(' ')[1];
 
     if (!token) {
         return res.status(401).send({
