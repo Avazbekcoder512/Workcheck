@@ -56,14 +56,14 @@ const authentication = async (req, res) => {
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: isProduction,
-            sameSite: "Strict",
+            sameSite: "Lax",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
         res.cookie('token', token, {
             httpOnly: true,
             secure: isProduction,
-            sameSite: "Strict",
+            sameSite: "Lax",
             maxAge: 2 * 60 * 60 * 1000
         })
 
