@@ -12,7 +12,7 @@ export const adminCreate = async (req, res) => {
       stripUnknown: true
     });
     if (error) {
-      req.file ? fs.unlinkSync(req.file.path) : false
+      req.file ? fs.unlinkSync(req.file.path) : false 
       return res.status(400).send({
         success: false,
         error: error.details[0].message,
