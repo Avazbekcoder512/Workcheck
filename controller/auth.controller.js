@@ -15,6 +15,13 @@ const authentication = async (req, res) => {
             });
         }
 
+        if (!value) {
+            return res.status(400).send({
+                success: false,
+                error: 'Iltimos barcha maydonlarni toʻldiring!'
+            })
+        }
+
         const { username, password } = value
 
         const admin = await prisma.admins.findFirst({
@@ -56,7 +63,7 @@ const authentication = async (req, res) => {
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: isProduction,
-            sameSite: "Lax",
+            sameSite: "None",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
