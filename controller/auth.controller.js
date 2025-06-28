@@ -60,14 +60,12 @@ const authentication = async (req, res) => {
             expiredTime: EXPIREDTIME
         })
 
-        // res.cookie('refreshToken', refreshToken, {
-        //     // httpOnly: true,
-        //     // secure: isProduction,
-        //     // sameSite: "None",
-        //     maxAge: 7 * 24 * 60 * 60 * 1000
-        // })
-
-         res.cookie('refreshToken', refreshToken)
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: "Strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
 
         return res.status(200).send({
             success: true,
