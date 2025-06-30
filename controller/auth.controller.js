@@ -80,7 +80,7 @@ const authentication = async (req, res) => {
 
 const refresh = async (req, res) => {
     try {
-        const refreshToken = req.cookie.refreshToken;
+        const refreshToken = req.cookies.refreshToken;
 
         if (!refreshToken) {
             return res.status(403).send({

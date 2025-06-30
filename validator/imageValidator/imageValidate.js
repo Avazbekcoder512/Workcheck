@@ -14,4 +14,10 @@ export const imageSchema = Joi.object({
     fieldname: Joi.string().valid('image').required().messages({
         "any.required": "Rasm yuklanmadi!"
     }),
+    encoding: Joi.string(),
+    destination: Joi.string().valid('image/').required(),
+
+    filename: Joi.string(),
+
+    path: Joi.string()
 })
