@@ -224,6 +224,8 @@ export const deleteAdmin = async (req, res) => {
       })
     }
 
+    await storage.delete(admin.image_path)
+
     await prisma.admins.delete({
       where: id
     })
