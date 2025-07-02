@@ -1,17 +1,8 @@
 import multer from "multer";
-import fs from "fs"
-import path from "path";
-import { fileURLToPath } from "url";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-if (!fs.existsSync(path.join(__dirname, "Image"))) fs.mkdirSync(path.join(__dirname, "Image"))
-
-const storage = multer.diskStorage({
+const storage = multer.memoryStorage({
     destination: "image/",
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + Math.floor(Math.random() * 1000000) + path.extname(file.originalname).toLowerCase())
-    }
 })
 
 const upload = multer({

@@ -4,7 +4,7 @@ import prisma from '../prisma/setup.js'
 import { updateAdminSchema } from "../validator/adminValidator/updateValidate.js";
 import { updatePassSchema } from "../validator/authValidator/authValidate.js";
 import { imageSchema } from "../validator/imageValidator/imageValidate.js";
-import fs from 'fs'
+import storage from "../helper/supabase.js";
 
 export const adminCreate = async (req, res) => {
   try {
@@ -13,7 +13,6 @@ export const adminCreate = async (req, res) => {
       stripUnknown: true
     });
     if (error) {
-      req.file ? fs.unlinkSync(req.file.path) : false 
       return res.status(400).send({
         success: false,
         error: error.details[0].message,
@@ -32,15 +31,19 @@ export const adminCreate = async (req, res) => {
         abortEarly: false
       })
       if (error) {
-        req.file ? fs.unlinkSync(req.file.path) : false
         return res.status(400).send({
           success: false,
           error: error.details[0].message,
         });
       }
+    } else {
+      return res.status(400).send({
+        success: false,
+        error: 'Rasm fayl yubormadingiz!'
+      })
     }
 
-    const image = req.file ? req.imageUrl : undefined;
+    const image = await storage.upload(req.file);
 
     const { name, username, password, phone, role } = value;
 
@@ -58,7 +61,7 @@ export const adminCreate = async (req, res) => {
     const passwordHash = await cryptoManeger.pass.hash(password);
 
     const admin = await prisma.admins.create({
-      data: { name, username, password: passwordHash, phone, role, ...(image && { image }) },
+      data: { name, username, password: passwordHash, phone, role, image: image.url, image_path: image.path },
     });
 
     return res.status(201).send({
