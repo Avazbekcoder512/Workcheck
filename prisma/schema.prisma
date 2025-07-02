@@ -33,6 +33,7 @@ model Admins {
   phone String @unique @db.VarChar(20)
   role Role
   image String? @db.Text
+  image_path String? @db.Text
   createdAt DateTime @default(now()) @db.Timestamp(6)
   updatedAt DateTime @updatedAt() @db.Timestamp(6)
 }
@@ -47,6 +48,7 @@ model Workers {
   gender GENDER
   passport String @db.VarChar(255)
   image String? @db.Text
+  image_path String? @db.Text
   face_encoding Json? @db.JsonB
   is_active Boolean @db.Boolean
   createdAt DateTime @default(now()) @db.Timestamp(6)
