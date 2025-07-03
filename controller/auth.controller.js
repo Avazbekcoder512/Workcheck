@@ -263,18 +263,12 @@ const checkauth = async (req, res) => {
     }
 }
 
-const logout = (req, res) => {
+const logout = async (req, res) => {
     try {
         res.clearCookie('refreshToken', {
             httpOnly: true,
-            secure: false,
-            sameSite: 'Strict'
-        })
-
-        res.clearCookie('token', {
-            httpOnly: true,
-            secure: false,
-            sameSite: 'Strict'
+            secure: isProduction,
+            sameSite: 'None'
         })
 
         return res.status(200).send({
