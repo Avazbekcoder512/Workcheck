@@ -4,6 +4,13 @@ const profile = async (req, res) => {
     try {
         const id = Number(req.user.id)
 
+        if (isNaN(id)) {
+            return res.status(400).send({
+                success: false,
+                error: "ID noto‘g‘ri formatda!"
+            });
+        }
+
         const admin = await prisma.admins.findFirst({
             where: { id },
             select: {

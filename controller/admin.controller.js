@@ -131,6 +131,13 @@ export const updateAdmin = async (req, res) => {
   try {
     const id = Number(req.params.id)
 
+    if (isNaN(id)) {
+      return res.status(400).send({
+        success: false,
+        error: "ID noto‘g‘ri formatda!"
+      });
+    }
+
     const admin = await prisma.admins.findFirst({
       where: {
         id
@@ -153,11 +160,34 @@ export const updateAdmin = async (req, res) => {
       });
     }
 
-    const updatedAdmin = await prisma.admins.update({
-      where: {
-        id
-      },
-      data: value
+    const updatedAdmin = {
+      name: value.name || admin.name,
+      username: value.username || admin.username,
+      phone: value.phone || admin.phone,
+      role: value || admin.role
+    }
+
+    if (req.file) {
+      const { error: imgError, value } = imageSchema.validate(req.file, { abortEarly: false })
+      if (imgError) {
+        return res.status(400).send({
+          success: false,
+          error: imgError.details[0].message
+        })
+      }
+
+      if (admin.image_path) {
+        await storage.delete(admin.image_path)
+      }
+
+      const image = await storage.upload(req.file)
+      updateAdmin.image_path = image.path
+      updateAdmin.image = image.url
+    }
+
+    await prisma.admins.update({
+      where: { id },
+      data: updateAdmin
     })
 
     return res.status(201).send({
@@ -173,6 +203,13 @@ export const updateAdmin = async (req, res) => {
 export const updatePassword = async (req, res) => {
   try {
     const id = Number(req.params.id)
+
+    if (isNaN(id)) {
+      return res.status(400).send({
+        success: false,
+        error: "ID noto‘g‘ri formatda!"
+      });
+    }
 
     const admin = await prisma.admins.findFirst({ where: { id } })
 
@@ -213,8 +250,15 @@ export const deleteAdmin = async (req, res) => {
   try {
     const id = Number(req.params.id)
 
+    if (isNaN(id)) {
+      return res.status(400).send({
+        success: false,
+        error: "ID noto‘g‘ri formatda!"
+      });
+    }
+
     const admin = await prisma.admins.findFirst({
-      where: id
+      where: { id }
     })
 
     if (!admin) {
@@ -227,7 +271,7 @@ export const deleteAdmin = async (req, res) => {
     await storage.delete(admin.image_path)
 
     await prisma.admins.delete({
-      where: id
+      where: { id }
     })
 
     return res.status(200).send({

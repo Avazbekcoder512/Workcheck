@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 export const imageSchema = Joi.object({
-    originalname: Joi.string().regex(/\.(jpg|jpeg|png|webp)$/i).required().messages({
+    originalname: Joi.string().regex(/\.(jpg|jpeg|png|svg|avf|webp)$/i).required().messages({
         "string.pattern.base": "Rasm nomi noto'g'ri formatda!",
         "any.required": "Rasm nomi talab qilinadi!"
     }),
