@@ -1,11 +1,11 @@
 import Joi from "joi";
 
 export const imageSchema = Joi.object({
-    originalname: Joi.string().regex(/\.(jpg|jpeg|png|webp)$/i).required().messages({
+    originalname: Joi.string().regex(/\.(jpg|jpeg|png|svg|avf|webp)$/i).required().messages({
         "string.pattern.base": "Rasm nomi noto'g'ri formatda!",
         "any.required": "Rasm nomi talab qilinadi!"
     }),
-    mimetype: Joi.string().valid("image/jpeg", "image/png", "image/gif", "image/webp").required().messages({
+    mimetype: Joi.string().valid("image/jpeg", "image/jpg", "image/png", "image/svg", "image/avf", "image/webp").required().messages({
         "any.required": "Rasm formati talab qilinadi!"
     }),
     size: Joi.number().max(5 * 1024 * 1024).required().messages({
@@ -15,9 +15,12 @@ export const imageSchema = Joi.object({
         "any.required": "Rasm yuklanmadi!"
     }),
     encoding: Joi.string(),
-    destination: Joi.string().valid('image/').required(),
 
     filename: Joi.string(),
+
+    buffer: Joi.required().messages({
+        "any.required": "Rasm yuklanmadi!"
+    }),
 
     path: Joi.string()
 })

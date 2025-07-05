@@ -19,7 +19,7 @@ const upload = multer({
             cb(new Error('Faqat rasm fayllarga ruxsat beriladi'), false)
         }
     },
-    limits: { fileSize: 5 * 1024 * 1024 }
+    // limits: { fileSize: 5 * 1024 * 1024 }
 })
 
 export default upload
