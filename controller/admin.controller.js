@@ -160,6 +160,13 @@ export const updateAdmin = async (req, res) => {
       });
     }
 
+    if (!value) {
+      return res.status(400).send({
+        success: false,
+        error: 'Iltimos barcha maydonlarni toʻldiring!'
+      })
+    }
+
     const updatedAdmin = {
       name: value.name || admin.name,
       username: value.username || admin.username,
@@ -181,19 +188,19 @@ export const updateAdmin = async (req, res) => {
       }
 
       const image = await storage.upload(req.file)
-      updateAdmin.image_path = image.path
-      updateAdmin.image = image.url
+      updatedAdmin.image_path = image.path
+      updatedAdmin.image = image.url
     }
 
     await prisma.admins.update({
       where: { id },
-      data: updateAdmin
+      data: updatedAdmin
     })
 
     return res.status(201).send({
       success: true,
       error: false,
-      message: 'Admin ma\'lumotlari muvaffaqiyatli yangilandi!'
+      message: 'Admin maʻlumotlari muvaffaqiyatli yangilandi!'
     })
   } catch (error) {
     throw error
