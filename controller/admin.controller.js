@@ -108,7 +108,24 @@ export const getOneAdmin = async (req, res) => {
   try {
     const id = Number(req.params.id)
 
-    const admin = await prisma.admins.findFirst({ where: { id } })
+    if (isNaN(id)) {
+      return res.status(400).send({
+        success: false,
+        error: "ID noto‘g‘ri formatda!"
+      });
+    }
+
+    const admin = await prisma.admins.findFirst({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        phone: true,
+        role: true,
+        image: true
+      }
+    })
 
     if (!admin) {
       return res.status(404).send({

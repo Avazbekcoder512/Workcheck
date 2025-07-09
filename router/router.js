@@ -8,5 +8,5 @@ export const appRouter = (app) => {
     app.use('/', loginRouter)
     app.use('/', indetification, adminRouter)
     app.use('/', indetification, profileRouter)
-    app.use('/', workerRouter)
+    app.use('/', indetification, workerRouter)
 }

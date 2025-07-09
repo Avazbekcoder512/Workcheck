@@ -6,7 +6,7 @@ import upload from "../../helper/multer.js"
 const router = express.Router()
 
 router
-    .post('/admin/create', authorization('SUPERADMIN', 'ADMIN'), upload.single('image'), adminCreate)
+    .post('/admin/create', authorization('SUPERADMIN'), upload.single('image'), adminCreate)
     .get('/admins', authorization('ADMIN', 'SUPERADMIN'), getAllAdmins)
     .get('/admin/:id', authorization('SUPERADMIN'), getOneAdmin)
     .put('/admin/:id/update', authorization('SUPERADMIN'), updateAdmin)
