@@ -1,4 +1,6 @@
 import express from "express";
+import { createServer } from 'http'
+import { Server } from 'socket.io'
 import { FRONTEND_URL_1, FRONTEND_URL_2, FRONTEND_URL_3, FRONTEND_URL_4, PORT } from "./config/config.js";
 import cors from "cors";
 import { appRouter } from "./router/router.js";
@@ -17,6 +19,15 @@ app.use(express.urlencoded({ extended: true }));
 
 appRouter(app);
 
+const server = createServer(app)
+
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST']
+  }
+})
+
 app.use((error, req, res, next) => {
   console.log(error);
 
@@ -27,6 +38,6 @@ app.use((error, req, res, next) => {
 });
 
 const Port = PORT || 3000;
-app.listen(Port, () => {
+server.listen(Port, () => {
   console.log(`Server ishga tushdi... Port:${Port}`);
 });
