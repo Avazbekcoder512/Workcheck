@@ -7,7 +7,7 @@ const profile = async (req, res) => {
         if (isNaN(id)) {
             return res.status(400).send({
                 success: false,
-                error: "ID noto‘g‘ri formatda!"
+                error: req.__('error.id')
             });
         }
 
@@ -26,7 +26,7 @@ const profile = async (req, res) => {
         if (!admin) {
             return res.status(404).send({
                 success: false,
-                error: 'Admin topilmadi!'
+                error: req.__(error.admin_not_found)
             })
         }
 

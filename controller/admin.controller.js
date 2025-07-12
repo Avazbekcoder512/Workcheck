@@ -8,9 +8,9 @@ import storage from "../helper/supabase.js";
 
 export const adminCreate = async (req, res) => {
   try {
-    const { error, value } = AdminCreateSchema.validate(req.body, {
-      abortEarly: false,
-      stripUnknown: true
+    const schema = AdminCreateSchema(req)
+    const { error, value } = schema.validate(req.body, {
+      abortEarly: false
     });
     if (error) {
       return res.status(400).send({
@@ -22,7 +22,7 @@ export const adminCreate = async (req, res) => {
     if (!value) {
       return res.status(400).send({
         success: false,
-        error: 'Iltimos barcha maydonlarni toʻldiring!'
+        error: req.__('error.value')
       })
     }
 
@@ -39,7 +39,7 @@ export const adminCreate = async (req, res) => {
     } else {
       return res.status(400).send({
         success: false,
-        error: 'Rasm fayl yubormadingiz!'
+        error: req.__('error.image_required')
       })
     }
 
@@ -54,7 +54,7 @@ export const adminCreate = async (req, res) => {
     if (existingAdmin) {
       return res.status(400).send({
         success: false,
-        error: "Bunday username yoki telefon raqamga ega admin alaqachon yaratilgan!",
+        error: req.__('error.existing_admin')
       });
     }
 
@@ -67,7 +67,7 @@ export const adminCreate = async (req, res) => {
     return res.status(201).send({
       success: true,
       error: false,
-      message: "Admin muvaffaqiyatli yaratildi!",
+      message: req.__('success.admin_create'),
     });
   } catch (error) {
     throw error;
@@ -90,7 +90,7 @@ export const getAllAdmins = async (req, res) => {
     if (admins.length == 0) {
       return res.status(404).send({
         success: false,
-        error: "Adminlar topilmadi!",
+        error: req.__('error.admins_not_found'),
       });
     }
 
@@ -111,7 +111,7 @@ export const getOneAdmin = async (req, res) => {
     if (isNaN(id)) {
       return res.status(400).send({
         success: false,
-        error: "ID noto‘g‘ri formatda!"
+        error: req.__('error.id')
       });
     }
 
@@ -130,7 +130,7 @@ export const getOneAdmin = async (req, res) => {
     if (!admin) {
       return res.status(404).send({
         success: false,
-        error: "Admin topilmadi!"
+        error: req.__('error.admin_not_found')
       })
     }
 
@@ -151,7 +151,7 @@ export const updateAdmin = async (req, res) => {
     if (isNaN(id)) {
       return res.status(400).send({
         success: false,
-        error: "ID noto‘g‘ri formatda!"
+        error: req.__('error.id')
       });
     }
 
@@ -164,7 +164,7 @@ export const updateAdmin = async (req, res) => {
     if (!admin) {
       return res.status(404).send({
         success: false,
-        error: "Admin topilmadi!"
+        error: req.__('error.admin_not_found')
       })
     }
 
@@ -180,7 +180,7 @@ export const updateAdmin = async (req, res) => {
     if (!value) {
       return res.status(400).send({
         success: false,
-        error: 'Iltimos barcha maydonlarni toʻldiring!'
+        error: req.__('error.value')
       })
     }
 
@@ -217,7 +217,7 @@ export const updateAdmin = async (req, res) => {
     return res.status(201).send({
       success: true,
       error: false,
-      message: 'Admin maʻlumotlari muvaffaqiyatli yangilandi!'
+      message: req.__('success.admin_update')
     })
   } catch (error) {
     throw error
@@ -231,7 +231,7 @@ export const updatePassword = async (req, res) => {
     if (isNaN(id)) {
       return res.status(400).send({
         success: false,
-        error: "ID noto‘g‘ri formatda!"
+        error: req.__('error.id')
       });
     }
 
@@ -240,11 +240,12 @@ export const updatePassword = async (req, res) => {
     if (!admin) {
       return res.status(404).send({
         success: false,
-        error: "Admin topilmadi!"
+        error: req.__('error.admin_not_found')
       })
     }
 
-    const { error, value } = updatePassSchema.validate(req.body, { abortEarly: false })
+    const schema = updatePassSchema(req)
+    const { error, value } = schema.validate(req.body, { abortEarly: false })
 
     if (error) {
       return res.status(400).send({
@@ -263,7 +264,7 @@ export const updatePassword = async (req, res) => {
     return res.status(201).send({
       success: true,
       error: false,
-      message: "Parol muvaffaqiyatli yangilandi!"
+      message: req.__('success.update_password')
     })
   } catch (error) {
     throw error
@@ -277,7 +278,7 @@ export const deleteAdmin = async (req, res) => {
     if (isNaN(id)) {
       return res.status(400).send({
         success: false,
-        error: "ID noto‘g‘ri formatda!"
+        error: req.__('error.id')
       });
     }
 
@@ -288,7 +289,7 @@ export const deleteAdmin = async (req, res) => {
     if (!admin) {
       return res.status(404).send({
         success: false,
-        error: "Admin topilmadi!"
+        error: req.__('error.admin_not_found')
       })
     }
 
@@ -301,7 +302,7 @@ export const deleteAdmin = async (req, res) => {
     return res.status(200).send({
       success: true,
       error: false,
-      message: "Admin muvaffaqiyatli o'chirildi!"
+      message: req.__('success.admin_delete')
     })
   } catch (error) {
     throw error
