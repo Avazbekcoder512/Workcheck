@@ -6,6 +6,7 @@ import workerRouter from './worker/workerRouter.js'
 
 export const appRouter = (app) => {
     app.use('/', loginRouter)
+
     app.use('/', indetification, adminRouter)
     app.use('/', indetification, profileRouter)
     app.use('/', indetification, workerRouter)

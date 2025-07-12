@@ -1,0 +1,5 @@
+{
+  "validation": {
+    "string": "The name must be text only!"
+  }
+}

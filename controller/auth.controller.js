@@ -5,7 +5,8 @@ import { loginSchema } from "../validator/authValidator/authValidate.js";
 
 const authentication = async (req, res) => {
     try {
-        const { error, value } = loginSchema.validate(req.body, {
+        const schema = loginSchema(req)
+        const { error, value } = schema.validate(req.body, {
             abortEarly: false,
         });
         if (error) {
@@ -18,7 +19,7 @@ const authentication = async (req, res) => {
         if (!value) {
             return res.status(400).send({
                 success: false,
-                error: 'Iltimos barcha maydonlarni toʻldiring!'
+                error: req.__('error.value')
             })
         }
 
@@ -33,7 +34,7 @@ const authentication = async (req, res) => {
         if (!admin) {
             return res.status(404).send({
                 success: false,
-                error: 'Bunday usernamega ega admin topilmadi!'
+                error: req.__('error.admin_not_found')
             })
         }
 
@@ -42,7 +43,7 @@ const authentication = async (req, res) => {
         if (!verifypass) {
             return res.status(400).send({
                 success: false,
-                error: 'Parol notoʻgʻri!'
+                error: req.__('error.password')
             })
         }
 
@@ -70,7 +71,7 @@ const authentication = async (req, res) => {
         return res.status(200).send({
             success: true,
             error: false,
-            message: "Kirish muvaffaqiyatli amalga oshirildi!",
+            message: req.__('success.login'),
             token
         })
     } catch (error) {
@@ -85,7 +86,7 @@ const refresh = async (req, res) => {
         if (!refreshToken) {
             return res.status(403).send({
                 success: false,
-                error: "Refresh token mavjud emas!"
+                error: req.__('error.refresh_not_found')
             })
         }
 
@@ -94,14 +95,14 @@ const refresh = async (req, res) => {
         if (!decoded === undefined) {
             return res.status(403).send({
                 success: false,
-                error: "Forbidden error!"
+                error: req.__('error.forbidden')
             })
         }
 
         if (decoded.role !== "ADMIN" && decoded.role !== 'SUPERADMIN') {
             return res.status(403).send({
                 success: false,
-                error: "Forbidden error!"
+                error: req.__('error.forbidden')
             })
         }
 
@@ -109,18 +110,26 @@ const refresh = async (req, res) => {
             if (((new Date().getTime()) - decoded.createdTime) > decoded.expiredTime) {
                 return res.status(401).send({
                     success: false,
-                    error: "Tokenni vaqti tugagan!"
+                    error: req.__('error.expired_token')
                 })
             }
         } else {
             return res.status(403).send({
                 success: false,
-                error: "Forbidden error!"
+                error: req.__('error.forbidden')
             })
         }
 
         if (decoded.id) {
             const id = Number(decoded.id)
+
+            if (isNaN(id)) {
+                return res.status(400).send({
+                    success: false,
+                    error: req.__('error.id')
+                });
+            }
+
             const admin = await prisma.admins.findFirst({
                 where: {
                     id
@@ -130,7 +139,7 @@ const refresh = async (req, res) => {
             if (!admin) {
                 return res.status(403).send({
                     success: false,
-                    error: "Forbidden error!"
+                    error: req.__('error.forbidden')
                 })
             }
 
@@ -145,13 +154,13 @@ const refresh = async (req, res) => {
             return res.status(200).send({
                 success: true,
                 error: false,
-                message: 'Token muvaffaqiyatli yangilandi!',
+                message: req.__('success.refresh_token'),
                 token
             })
         } else {
             return res.status(403).send({
                 success: false,
-                error: "Forbidden error!"
+                error: req.__('error.forbidden')
             })
         }
 
@@ -165,7 +174,7 @@ const indetification = async (req, res, next) => {
 
     if (!authHeader) {
         return res.status(404).send({
-            error: 'Token not found',
+            error: req.__('error.token_not_found'),
         });
     }
 
@@ -174,7 +183,7 @@ const indetification = async (req, res, next) => {
     if (!token) {
         return res.status(401).send({
             success: false,
-            error: "Iltimos qayta kirish qiling!"
+            error: req.__('error.login')
         })
     }
 
@@ -183,14 +192,14 @@ const indetification = async (req, res, next) => {
     if (decode === undefined) {
         return res.status(403).send({
             success: false,
-            error: "Forbidden error!"
+            error: req.__('error.forbidden')
         })
     }
 
     if (decode.role !== "ADMIN" && decode.role !== "SUPERADMIN") {
         return res.status(403).send({
             success: false,
-            error: "Forbidden error!"
+            error: req.__('error.forbidden')
         })
     }
 
@@ -198,13 +207,13 @@ const indetification = async (req, res, next) => {
         if (((new Date().getTime()) - decode.createdTime) > decode.expiredTime) {
             return res.status(401).send({
                 success: false,
-                error: "Tokenni vaqti tugagan!"
+                error: req.__('error.expired_token')
             })
         }
     } else {
         return res.status(403).send({
             success: false,
-            error: "Forbidden error!"
+            error: req.__('error.forbidden')
         })
     }
 
@@ -219,14 +228,14 @@ const indetification = async (req, res, next) => {
         if (!admin) {
             return res.status(403).send({
                 success: false,
-                error: "Forbidden error!"
+                error: req.__('error.forbidden')
             })
         }
         req.user = admin
     } else {
         return res.status(403).send({
             success: false,
-            error: "Forbidden error!"
+            error: req.__('error.forbidden')
         })
     }
 
@@ -241,7 +250,7 @@ const authorization = (...roles) => {
             if (!roles.includes(role)) {
                 return res.status(403).send({
                     success: false,
-                    error: "Sizga ruxsat yoʻq"
+                    error: req.__('error.not_allowed')
                 })
             }
             next()
@@ -273,7 +282,7 @@ const logout = async (req, res) => {
 
         return res.status(200).send({
             success: true,
-            message: "Chiqish muvaffaqiyatli amalga oshirildi!"
+            message: req.__('success.logout')
         })
     } catch (error) {
         throw error
