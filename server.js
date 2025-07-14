@@ -12,7 +12,7 @@ const app = express();
 app.use(i18n.init)
 
 app.use((req, res, next) => {
-  const lang = req.headers['accept-language'] || 'uz'
+  const lang = req.headers['accept'] || 'uz'
 
   i18n.setLocale(req, lang)
   next()
