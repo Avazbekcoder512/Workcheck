@@ -1,5 +1,103 @@
 {
   "validation": {
-    "string": "The name must be text only!"
+    "name_string": "Name must be a string!",
+    "name_empty": "Please enter the name!",
+    "name_min": "Name must be at least {#limit} characters!",
+    "name_max": "Name must be at most {#limit} characters!",
+    "name_required": "Name is a required field!",
+
+    "username_string": "Username must be a string!",
+    "username_empty": "Please enter the username!",
+    "username_min": "Username must be at least {#limit} characters!",
+    "username_max": "Username must be at most {#limit} characters!",
+    "username_required": "Username is a required field!",
+
+    "password_string": "Password must be a string!",
+    "password_empty": "Please enter the password!",
+    "password_min": "Password must be at least {#limit} characters!",
+    "password_max": "Password must be at most {#limit} characters!",
+    "password_required": "Password is a required field!",
+
+    "phone_string": "Phone number must be a string!",
+    "phone_empty": "Please enter the phone number!",
+    "phone_required": "Phone number is a required field!",
+
+    "role_strnig": "Role must be a string!",
+    "role_empty": "Please enter the role!",
+    "role_only": "Role must be either ADMIN or SUPERADMIN!",
+    "role_required": "Role is a required field!"
+  },
+
+  "error": {
+    "value": "Please fill in all the fields!",
+    "image_required": "You did not upload an image file!",
+    "existing_admin": "An admin with this username or phone number already exists!",
+    "admins_not_found": "Admins not found!",
+    "id": "Invalid ID format!",
+    "admin_not_found": "Admin not found!",
+    "password": "Incorrect password!",
+    "forbidden": "Forbidden error!",
+    "refresh_not_found": "Refresh token is missing!",
+    "expired_token": "Token has expired!",
+    "token_not_found": "Token not found!",
+    "login": "Please log in again!",
+    "not_allowed": "You are not authorized!",
+    "server": "Internal server error!"
+  },
+
+  "success": {
+    "admin_create": "Admin created successfully!",
+    "admin_update": "Admin data updated successfully!",
+    "update_password": "Password updated successfully!",
+    "admin_delete": "Admin deleted successfully!",
+    "login": "Login successful!",
+    "refresh_token": "Token refreshed successfully!",
+    "logout": "Logout successful!"
+  },
+
+  "worker": {
+    "fullname_string": "Employee full name must be a string!",
+    "fullname_empty": "Please enter the employee's full name!",
+    "fullname_min": "Full name must be at least {#limit} characters!",
+    "fullname_max": "Full name must be at most {#limit} characters!",
+    "fullname_required": "Employee full name is required!",
+
+    "position_string": "Position must be a string!",
+    "position_empty": "Please enter the position!",
+    "position_max": "Position must be at most {#limit} characters!",
+    "position_required": "Position is required!",
+
+    "salary_number": "Salary must be a number!",
+    "salary_empty": "Please enter the salary!",
+    "salary_requied": "Salary is required!",
+
+    "phone_string": "Phone number must be a string!",
+    "phone_empty": "Please enter the phone number!",
+    "phone_required": "Phone number is required!",
+
+    "age_number": "Age must be a number!",
+    "age_empty": "Please enter the age!",
+    "age_required": "Age is required!",
+
+    "gender_string": "Gender must be a string!",
+    "gender_empty": "Please enter the gender!",
+    "gender_only": "Gender must be either Male or Female!",
+    "gender_required": "Gender is required!",
+
+    "passport_string": "Passport series must be a string!",
+    "passport_empty": "Please enter the passport series!",
+    "passport_min": "Passport series must be at least {#limit} characters!",
+    "passport_max": "Passport series must be at most {#limit} characters!",
+    "passport_required": "Passport series is required!",
+
+    "is_active_required": "Employment status is required!",
+    "is_active_base": "Employment status must be true or false!",
+
+    "workers_not_found": "No employees found!",
+    "not_found": "Employee not found!",
+
+    "create": "Employee created successfully!",
+    "update": "Employee data updated successfully!",
+    "delete": "Employee deleted successfully!"
   }
 }
