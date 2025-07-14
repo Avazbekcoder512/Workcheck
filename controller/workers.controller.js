@@ -8,7 +8,8 @@ import updateWorkerSchema from "../validator/workerValidator/updateValidate.js"
 
 const workerCreate = async (req, res) => {
     try {
-        const { error, value } = workerCreateSchema.validate(req.body, { abortEarly: false })
+        const schema = workerCreateSchema(req)
+        const { error, value } = schema.validate(req.body, { abortEarly: false })
 
         if (error) {
             return res.status(400).send({
@@ -20,7 +21,7 @@ const workerCreate = async (req, res) => {
         if (!value) {
             return res.status(400).send({
                 success: false,
-                error: 'Barcha maydonlarni toʻldiring!'
+                error: req.__('error.value')
             })
         }
 
@@ -35,7 +36,7 @@ const workerCreate = async (req, res) => {
         } else {
             return res.status(400).send({
                 success: false,
-                error: 'Rasm fayl yubormadingiz!'
+                error: req.__('error.image_required')
             })
         }
 
@@ -59,7 +60,7 @@ const workerCreate = async (req, res) => {
         return res.status(201).send({
             success: true,
             error: false,
-            message: 'Xodim muvaffaqiyatli yaratildi!'
+            message: req.__('worker.create')
         })
 
     } catch (error) {
@@ -74,7 +75,7 @@ const getAllWorkers = async (req, res) => {
         if (workers.length == 0) {
             return res.status(404).send({
                 success: false,
-                error: 'Xodimlar mavjud emas!'
+                error: req.__('worker.workers_not_found')
             })
         }
 
@@ -96,7 +97,7 @@ const getOneWorker = async (req, res) => {
         if (isNaN(id)) {
             return res.status(400).send({
                 success: false,
-                error: 'Id notoʻgʻri formatda!'
+                error: req.__('error.id')
             })
         }
 
@@ -105,7 +106,7 @@ const getOneWorker = async (req, res) => {
         if (!worker) {
             return res.status(404).send({
                 success: false,
-                error: 'Xodim topilmadi!'
+                error: req.__('worker.not_found')
             })
         }
 
@@ -127,13 +128,20 @@ const workerUpdate = async (req, res) => {
         if (isNaN(id)) {
             return res.status(400).send({
                 success: false,
-                error: 'Id notoʻgʻri formatda!'
+                error: req.__('error.id')
             })
         }
 
         const worker = await prisma.workers.findFirst({ where: { id } })
 
-        const { error, value } = updateWorkerSchema.validate(req.body)
+        if (!worker) {
+            return res.status(404).send({
+                success: false,
+                error: req.__('worker.not_found')
+            })
+        }
+        const schema = updateWorkerSchema(req)
+        const { error, value } = schema.validate(req.body)
 
         if (error) {
             return res.status(400).send({
@@ -145,7 +153,7 @@ const workerUpdate = async (req, res) => {
         if (!value) {
             return res.status(400).send({
                 success: false,
-                error: 'Barcha maydonlarni toʻldiring!'
+                error: req.__('error.value')
             })
         }
 
@@ -186,7 +194,7 @@ const workerUpdate = async (req, res) => {
         return res.status(201).send({
             success: true,
             error: false,
-            message: 'Xodim maʻlumotlari muvaffaqiyatli yangilandi!'
+            message: req.__('worker.update')
         })
 
     } catch (error) {
@@ -201,7 +209,7 @@ const deleteWorker = async (req, res) => {
         if (isNaN(id)) {
             return res.status(400).send({
                 success: false,
-                error: 'Id notoʻgʻri formatda!'
+                error: req.__('error.id')
             })
         }
 
@@ -210,7 +218,7 @@ const deleteWorker = async (req, res) => {
         if (!worker) {
             return res.status(404).send({
                 success: false,
-                error: 'Xodim topilmadi!'
+                error: req.__('worker.not_found')
             })
         }
 
@@ -223,7 +231,7 @@ const deleteWorker = async (req, res) => {
         return res.status(200).send({
             success: true,
             error: false,
-            message: "Xodim muvaffaqiyatli oʻchirildi!"
+            message: req.__('worker.delete')
         })
     } catch (error) {
         throw error

@@ -29,7 +29,7 @@
   },
 
   "error": {
-    "value": "Iltimos barcha maydonlarni toʻldiring!",
+    "value": "Barcha maydonlarni toʻldiring!",
     "image_required": "Rasm fayl yubormadingiz!",
     "existing_admin": "Bunday username yoki telefon raqamga ega admin alaqachon yaratilgan!",
     "admins_not_found": "Adminlar topilmadi!",
@@ -41,7 +41,8 @@
     "expired_token": "Tokenni vaqti tugagan!",
     "token_not_found": "Token not found!",
     "login": "Iltimos qayta kirish qiling!",
-    "not_allowed": "Sizga ruxsat yoʻq!"
+    "not_allowed": "Sizga ruxsat yoʻq!",
+    "server": "Serverda ichki xatolik!"
   },
 
   "success": {
@@ -90,6 +91,13 @@
     "passport_required": "Xodimning passport seriyasini kiritish shart!",
 
     "is_active_required": "Xodim ishda yoki ishda emasligi kiritlishi shart!",
-    "is_active_base": "Xodim ishda yoki ishda emasligi ha yoki yoʻq boʻlishi kerak!"
+    "is_active_base": "Xodim ishda yoki ishda emasligi ha yoki yoʻq boʻlishi kerak!",
+
+    "workers_not_found": "Xodimlar mavjud emas!",
+    "not_found": "Xodim topilmadi!",
+
+    "create": "Xodim muvaffaqiyatli yaratildi!",
+    "update": "Xodim maʻlumotlari muvaffaqiyatli yangilandi!",
+    "delete": "Xodim muvaffaqiyatli oʻchirildi!"
   }
 }
