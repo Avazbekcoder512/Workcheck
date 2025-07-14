@@ -167,8 +167,8 @@ export const updateAdmin = async (req, res) => {
         error: req.__('error.admin_not_found')
       })
     }
-
-    const { error, value } = updateAdminSchema.validate(req.body, { abortEarly: false })
+    const schema = updateAdminSchema(req)
+    const { error, value } = schema.validate(req.body, { abortEarly: false })
 
     if (error) {
       return res.status(400).send({
