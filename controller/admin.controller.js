@@ -188,7 +188,7 @@ export const updateAdmin = async (req, res) => {
       name: value.name || admin.name,
       username: value.username || admin.username,
       phone: value.phone || admin.phone,
-      role: value || admin.role
+      role: value.role || admin.role
     }
 
     if (req.file) {
@@ -293,7 +293,9 @@ export const deleteAdmin = async (req, res) => {
       })
     }
 
-    await storage.delete(admin.image_path)
+    if (admin.image_path) {
+      await storage.delete(admin.image_path)
+    }
 
     await prisma.admins.delete({
       where: { id }
