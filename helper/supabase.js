@@ -24,10 +24,10 @@ const storage = {
 
             if (error) throw uploadError
 
-            const { data: urlData} = supabase
-            .storage
-            .from(bucketName)
-            .getPublicUrl(data.path)
+            const { data: urlData } = supabase
+                .storage
+                .from(bucketName)
+                .getPublicUrl(data.path)
 
             return {
                 path: data.path,
@@ -40,9 +40,9 @@ const storage = {
 
     delete: async (filePath) => {
         const { error } = await supabase
-        .storage
-        .from(bucketName)
-        .remove([filePath])
+            .storage
+            .from(bucketName)
+            .remove([filePath])
         if (error) throw error
     }
 }

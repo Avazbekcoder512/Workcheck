@@ -1,103 +1,92 @@
 {
-  "validation": {
-    "name_string": "Ism faqat matn boʻlishi kerak!",
-    "name_empty": "Ismni kiriting!",
-    "name_min": "Ism kamida {#limit} ta belgidan iborat boʻlishi kerak!",
-    "name_max": "Ism eng koʻpi bilan {#limit} ta belgidan iborat boʻlishi kerak!",
-    "name_required": "Ism majburiy maydon!",
-
-    "username_string": "Username faqat matn boʻlishi kerak!",
-    "username_empty": "Usernameni kiriting!",
-    "username_min": "Username kamida {#limit} ta belgidan iborat boʻlishi kerak!",
-    "username_max": "Username eng koʻpi bilan {#limit} ta belgidan iborat boʻlishi kerak!",
-    "username_required": "Username majburiy maydon!",
-
-    "password_string": "Parol faqat matn boʻlishi kerak!",
-    "password_empty": "Parolni kiriting!",
-    "password_min": "Parol kamida {#limit} ta belgidan iborat boʻlishi kerak!",
-    "password_max": "Parol eng koʻpi bilan {#limit} ta belgidan iborat boʻlishi kerak!",
-    "password_required": "Parol majburiy maydon!",
-
-    "phone_string": "Telefon raqam faqat matn boʻlishi kerak!",
-    "phone_empty": "Telefon raqamni kiriting!",
-    "phone_required": "Telefon raqam majburiy maydon!",
-
-    "role_strnig": "Role faqat matn boʻlishi kerak!",
-    "role_empty": "Roleni kiriting!",
-    "role_only": "Role faqat ADMIN yoki SUPERADMIN bo‘lishi mumkin!",
-    "role_required": "Role majburiy maydon!"
-  },
-
-  "error": {
-    "value": "Barcha maydonlarni toʻldiring!",
-    "image_required": "Rasm fayl yubormadingiz!",
-    "existing_admin": "Bunday username yoki telefon raqamga ega admin alaqachon yaratilgan!",
-    "admins_not_found": "Adminlar topilmadi!",
-    "id": "ID noto‘g‘ri formatda!",
-    "admin_not_found": "Admin topilmadi!",
-    "password": "Parol notoʻgʻri!",
-    "forbidden": "Forbidden error!",
-    "refresh_not_found": "Refresh token mavjud emas!",
-    "expired_token": "Tokenni vaqti tugagan!",
-    "token_not_found": "Token not found!",
-    "login": "Iltimos qayta kirish qiling!",
-    "not_allowed": "Sizga ruxsat yoʻq!",
-    "server": "Serverda ichki xatolik!"
-  },
-
-  "success": {
-    "admin_create": "Admin muvaffaqiyatli yaratildi!",
-    "admin_update": "Admin maʻlumotlari muvaffaqiyatli yangilandi!",
-    "update_password": "Parol muvaffaqiyatli yangilandi!",
-    "admin_delete": "Admin muvaffaqiyatli o'chirildi!",
-    "login": "Kirish muvaffaqiyatli amalga oshirildi!",
-    "refresh_token": "Token muvaffaqiyatli yangilandi!",
-    "logout": "Chiqish muvaffaqiyatli amalga oshirildi!"
-  },
-
-  "worker": {
-    "fullname_string": "Xodimning Familiyasi, Ismi va Sharifini matnda kiriting!",
-    "fullname_empty": "Xodimni Familiyasi, Ismi va Sharifini kiriting!",
-    "fullname_min": "Xodimning toʻliq ismi kamida {#limit} ta belgidan iborat boʻlishi kerak!",
-    "fullname_max": "Xodimning toʻliq ismi eng koʻpi bilan {#limit} ta belgidan iborat boʻlishi kerak!",
-    "fullname_required": "Xodimning toʻliq ismi kiritilishi shart!",
-
-    "position_string": "Xodimning lavozimini matnda kiriting!",
-    "position_empty": "Xodimning lavozimini kiritng!",
-    "position_max": "Xodimning lavozimi eng koʻpi bilan {#limit} ta belgidan iborat boʻlishi kerak!",
-    "position_required": "Xodimning lavozimi kiritilishi shart!",
-
-    "salary_number": "Xodimning Ish haqqini raqamda kiritng!",
-    "salary_empty": "Xodimning Ish haqqini kiriting!",
-    "salary_requied": "Xodimning ish haqi kiritilish shart!",
-
-    "phone_string": "Xodimning telefon raqamini matnda kiriting!",
-    "phone_empty": "Xodimning telefon raqamini kiritng!",
-    "phone_required": "Xodimning telefon raqami kiritilishi shart!",
-
-    "age_number": "Xodimning yoshini raqamda kiriting!",
-    "age_empty": "Xodimning yoshini kiriting!",
-    "age_required": "Xodimning yoshi kiritilishi shart!",
-
-    "gender_string": "Xodimning jinsi haqidagi maʻlumotni matnda kiriting!",
-    "gender_empty": "Xodimning jinsi haqidagi maʻlumotni kiriting!",
-    "gender_only": "Xodimning jinsi faqat Ayol yoki Erkak boʻlishi shart!",
-    "gender_required": "Xodimning jinsi haqidagi maʻlumot kiritlishi shart!",
-
-    "passport_string": "Xodimning pasport seriyasini matnda kiriting!",
-    "passport_empty": "Xodimning passport seriyasini kiriting!",
-    "passport_min": "Xodimning passport seriyasi kamida {#limit} ta belgidan iborat boʻlishi kerak!",
-    "passport_max": "Xodimning passport seriyasi eng koʻpi bilan {#limit} ta belgidan iborat boʻlishi karak!",
-    "passport_required": "Xodimning passport seriyasini kiritish shart!",
-
-    "is_active_required": "Xodim ishda yoki ishda emasligi kiritlishi shart!",
-    "is_active_base": "Xodim ishda yoki ishda emasligi ha yoki yoʻq boʻlishi kerak!",
-
-    "workers_not_found": "Xodimlar mavjud emas!",
-    "not_found": "Xodim topilmadi!",
-
-    "create": "Xodim muvaffaqiyatli yaratildi!",
-    "update": "Xodim maʻlumotlari muvaffaqiyatli yangilandi!",
-    "delete": "Xodim muvaffaqiyatli oʻchirildi!"
-  }
+	"validation": {
+		"name_string": "Ism faqat matn boʻlishi kerak!",
+		"name_empty": "Ismni kiriting!",
+		"name_min": "Ism kamida {#limit} ta belgidan iborat boʻlishi kerak!",
+		"name_max": "Ism eng koʻpi bilan {#limit} ta belgidan iborat boʻlishi kerak!",
+		"name_required": "Ism majburiy maydon!",
+		"username_string": "Username faqat matn boʻlishi kerak!",
+		"username_empty": "Usernameni kiriting!",
+		"username_min": "Username kamida {#limit} ta belgidan iborat boʻlishi kerak!",
+		"username_max": "Username eng koʻpi bilan {#limit} ta belgidan iborat boʻlishi kerak!",
+		"username_required": "Username majburiy maydon!",
+		"password_string": "Parol faqat matn boʻlishi kerak!",
+		"password_empty": "Parolni kiriting!",
+		"password_min": "Parol kamida {#limit} ta belgidan iborat boʻlishi kerak!",
+		"password_max": "Parol eng koʻpi bilan {#limit} ta belgidan iborat boʻlishi kerak!",
+		"password_required": "Parol majburiy maydon!",
+		"phone_string": "Telefon raqam faqat matn boʻlishi kerak!",
+		"phone_empty": "Telefon raqamni kiriting!",
+		"phone_required": "Telefon raqam majburiy maydon!",
+		"role_strnig": "Role faqat matn boʻlishi kerak!",
+		"role_empty": "Roleni kiriting!",
+		"role_only": "Role faqat ADMIN yoki SUPERADMIN bo‘lishi mumkin!",
+		"role_required": "Role majburiy maydon!",
+		"username": {
+			"string": "validation.username.string"
+		},
+		"required": "validation.required",
+		"role_string": "validation.role_string"
+	},
+	"error": {
+		"value": "Barcha maydonlarni toʻldiring!",
+		"image_required": "Rasm fayl yubormadingiz!",
+		"existing_admin": "Bunday username yoki telefon raqamga ega admin alaqachon yaratilgan!",
+		"admins_not_found": "Adminlar topilmadi!",
+		"id": "ID noto‘g‘ri formatda!",
+		"admin_not_found": "Admin topilmadi!",
+		"password": "Parol notoʻgʻri!",
+		"forbidden": "Forbidden error!",
+		"refresh_not_found": "Refresh token mavjud emas!",
+		"expired_token": "Tokenni vaqti tugagan!",
+		"token_not_found": "Token not found!",
+		"login": "Iltimos qayta kirish qiling!",
+		"not_allowed": "Sizga ruxsat yoʻq!",
+		"server": "Serverda ichki xatolik!"
+	},
+	"success": {
+		"admin_create": "Admin muvaffaqiyatli yaratildi!",
+		"admin_update": "Admin maʻlumotlari muvaffaqiyatli yangilandi!",
+		"update_password": "Parol muvaffaqiyatli yangilandi!",
+		"admin_delete": "Admin muvaffaqiyatli o'chirildi!",
+		"login": "Kirish muvaffaqiyatli amalga oshirildi!",
+		"refresh_token": "Token muvaffaqiyatli yangilandi!",
+		"logout": "Chiqish muvaffaqiyatli amalga oshirildi!"
+	},
+	"worker": {
+		"fullname_string": "Xodimning Familiyasi, Ismi va Sharifini matnda kiriting!",
+		"fullname_empty": "Xodimni Familiyasi, Ismi va Sharifini kiriting!",
+		"fullname_min": "Xodimning toʻliq ismi kamida {#limit} ta belgidan iborat boʻlishi kerak!",
+		"fullname_max": "Xodimning toʻliq ismi eng koʻpi bilan {#limit} ta belgidan iborat boʻlishi kerak!",
+		"fullname_required": "Xodimning toʻliq ismi kiritilishi shart!",
+		"position_string": "Xodimning lavozimini matnda kiriting!",
+		"position_empty": "Xodimning lavozimini kiritng!",
+		"position_max": "Xodimning lavozimi eng koʻpi bilan {#limit} ta belgidan iborat boʻlishi kerak!",
+		"position_required": "Xodimning lavozimi kiritilishi shart!",
+		"salary_number": "Xodimning Ish haqqini raqamda kiritng!",
+		"salary_empty": "Xodimning Ish haqqini kiriting!",
+		"salary_requied": "Xodimning ish haqi kiritilish shart!",
+		"phone_string": "Xodimning telefon raqamini matnda kiriting!",
+		"phone_empty": "Xodimning telefon raqamini kiritng!",
+		"phone_required": "Xodimning telefon raqami kiritilishi shart!",
+		"age_number": "Xodimning yoshini raqamda kiriting!",
+		"age_empty": "Xodimning yoshini kiriting!",
+		"age_required": "Xodimning yoshi kiritilishi shart!",
+		"gender_string": "Xodimning jinsi haqidagi maʻlumotni matnda kiriting!",
+		"gender_empty": "Xodimning jinsi haqidagi maʻlumotni kiriting!",
+		"gender_only": "Xodimning jinsi faqat Ayol yoki Erkak boʻlishi shart!",
+		"gender_required": "Xodimning jinsi haqidagi maʻlumot kiritlishi shart!",
+		"passport_string": "Xodimning pasport seriyasini matnda kiriting!",
+		"passport_empty": "Xodimning passport seriyasini kiriting!",
+		"passport_min": "Xodimning passport seriyasi kamida {#limit} ta belgidan iborat boʻlishi kerak!",
+		"passport_max": "Xodimning passport seriyasi eng koʻpi bilan {#limit} ta belgidan iborat boʻlishi karak!",
+		"passport_required": "Xodimning passport seriyasini kiritish shart!",
+		"is_active_required": "Xodim ishda yoki ishda emasligi kiritlishi shart!",
+		"is_active_base": "Xodim ishda yoki ishda emasligi ha yoki yoʻq boʻlishi kerak!",
+		"workers_not_found": "Xodimlar mavjud emas!",
+		"not_found": "Xodim topilmadi!",
+		"create": "Xodim muvaffaqiyatli yaratildi!",
+		"update": "Xodim maʻlumotlari muvaffaqiyatli yangilandi!",
+		"delete": "Xodim muvaffaqiyatli oʻchirildi!"
+	}
 }

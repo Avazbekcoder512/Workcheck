@@ -9,7 +9,7 @@ router
     .post('/admin/create', authorization('SUPERADMIN'), upload.single('image'), adminCreate)
     .get('/admins', authorization('ADMIN', 'SUPERADMIN'), getAllAdmins)
     .get('/admin/:id', authorization('SUPERADMIN'), getOneAdmin)
-    .put('/admin/:id/update', authorization('SUPERADMIN'), updateAdmin)
+    .put('/admin/:id/update', authorization('SUPERADMIN'), upload.single('image'), updateAdmin)
     .put('/admin/:id/updatepass', authorization('SUPERADMIN'), updatePassword)
     .delete('/admin/:id/delete', authorization('SUPERADMIN'), deleteAdmin)
 
