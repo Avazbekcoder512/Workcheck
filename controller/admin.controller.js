@@ -77,6 +77,7 @@ export const adminCreate = async (req, res) => {
 export const getAllAdmins = async (req, res) => {
   try {
     const admins = await prisma.admins.findMany({
+      orderBy: { id: "asc"},
       select: {
         id: true,
         name: true,

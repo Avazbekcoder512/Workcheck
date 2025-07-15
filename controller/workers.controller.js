@@ -70,7 +70,9 @@ const workerCreate = async (req, res) => {
 
 const getAllWorkers = async (req, res) => {
     try {
-        const workers = await prisma.workers.findMany()
+        const workers = await prisma.workers.findMany({
+            orderBy: {id: "asc"}
+        })
 
         if (workers.length == 0) {
             return res.status(404).send({
