@@ -22,7 +22,7 @@ const storage = {
                     upsert: false
                 })
 
-            if (error) throw uploadError
+            if (error) throw error
 
             const { data: urlData } = supabase
                 .storage
