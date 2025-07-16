@@ -193,7 +193,7 @@ const workerUpdate = async (req, res) => {
             data: updatedWorker
         })
 
-        return res.status(201).send({
+        return res.status(200).send({
             success: true,
             error: false,
             message: req.__('worker.update')

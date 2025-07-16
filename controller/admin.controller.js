@@ -215,7 +215,7 @@ export const updateAdmin = async (req, res) => {
       data: updatedAdmin
     })
 
-    return res.status(201).send({
+    return res.status(200).send({
       success: true,
       error: false,
       message: req.__('success.admin_update')
@@ -262,7 +262,7 @@ export const updatePassword = async (req, res) => {
       data: { password: passwordHash }
     })
 
-    return res.status(201).send({
+    return res.status(200).send({
       success: true,
       error: false,
       message: req.__('success.update_password')
