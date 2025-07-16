@@ -33,6 +33,41 @@ export const AdminCreateSchema = (req) => {
             'string.empty': req.__('validation.role_empty'),
             'any.only': req.__('validation.role_only'),
             'any.required': req.__('validation.role_required')
+        }),
+        image: Joi.object({
+            originalname: Joi.string()
+                .pattern(/\.(jpg|jpeg|png|svg|avf|webp)$/i)
+                .required()
+                .messages({
+                    'string.pattern.base': "Rasm nomi noto'g'ri formatda!",
+                    'any.required': "Rasm nomi talab qilinadi!"
+                }),
+            mimetype: Joi.string()
+                .valid("image/jpeg", "image/jpg", "image/png", "image/svg", "image/avf", "image/webp")
+                .required()
+                .messages({
+                    'any.required': "Rasm formati talab qilinadi!"
+                }),
+            size: Joi.number()
+                .max(5 * 1024 * 1024)
+                .required()
+                .messages({
+                    'number.max': "Rasm hajmi 5 mb dan oshmasligi kerak!"
+                }),
+            fieldname: Joi.string()
+                .valid('image')
+                .required()
+                .messages({
+                    'any.required': "Rasm yuklanmadi!"
+                }),
+            encoding: Joi.string().optional(),
+            filename: Joi.string().optional(),
+            buffer: Joi.any()
+                .required()
+                .messages({
+                    'any.required': "Rasm yuklanmadi!"
+                }),
+            path: Joi.string().optional()
         })
     })
 }

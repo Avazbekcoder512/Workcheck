@@ -2,14 +2,21 @@ import { cryptoManeger } from "../helper/crypto.js";
 import { AdminCreateSchema } from "../validator/adminValidator/createValidate.js";
 import prisma from '../prisma/setup.js'
 import { updateAdminSchema } from "../validator/adminValidator/updateValidate.js";
-import { updatePassSchema } from "../validator/authValidator/authValidate.js";
-import { imageSchema } from "../validator/imageValidator/imageValidate.js";
+// import { updatePassSchema } from "../validator/authValidator/authValidate.js";
 import storage from "../helper/supabase.js";
 
 export const adminCreate = async (req, res) => {
   try {
+    if (!req.file) {
+      return res.status(400).send({
+        success: false,
+        error: req.__('error.image_required')
+      });
+    }
+
+    const payload = { ...req.body, image: req.file }
     const schema = AdminCreateSchema(req)
-    const { error, value } = schema.validate(req.body, {
+    const { error, value } = schema.validate(payload, {
       abortEarly: false
     });
     if (error) {
@@ -26,30 +33,13 @@ export const adminCreate = async (req, res) => {
       })
     }
 
-    if (req.file) {
-      const { error, value } = imageSchema.validate(req.file, {
-        abortEarly: false
-      })
-      if (error) {
-        return res.status(400).send({
-          success: false,
-          error: error.details[0].message,
-        });
-      }
-    } else {
-      return res.status(400).send({
-        success: false,
-        error: req.__('error.image_required')
-      })
-    }
-
-    const image = await storage.upload(req.file);
+    const imageUpload = await storage.upload(req.file);
 
     const { name, username, password, phone, role } = value;
 
     const existingAdmin = await prisma.admins.findFirst({
-      where: { username, phone },
-    });
+      where: { OR: [{ username }, { phone }] }
+    })
 
     if (existingAdmin) {
       return res.status(400).send({
@@ -61,7 +51,7 @@ export const adminCreate = async (req, res) => {
     const passwordHash = await cryptoManeger.pass.hash(password);
 
     const admin = await prisma.admins.create({
-      data: { name, username, password: passwordHash, phone, role, image: image.url, image_path: image.path },
+      data: { name, username, password: passwordHash, phone, role, image: imageUpload.url, image_path: imageUpload.path },
     });
 
     return res.status(201).send({
@@ -77,7 +67,7 @@ export const adminCreate = async (req, res) => {
 export const getAllAdmins = async (req, res) => {
   try {
     const admins = await prisma.admins.findMany({
-      orderBy: { id: "asc"},
+      orderBy: { id: "asc" },
       select: {
         id: true,
         name: true,
@@ -168,8 +158,10 @@ export const updateAdmin = async (req, res) => {
         error: req.__('error.admin_not_found')
       })
     }
+
+    const payload = { ...req.body, image: req.file }
     const schema = updateAdminSchema(req)
-    const { error, value } = schema.validate(req.body, { abortEarly: false })
+    const { error, value } = schema.validate(payload, { abortEarly: false })
 
     if (error) {
       return res.status(400).send({
@@ -185,33 +177,28 @@ export const updateAdmin = async (req, res) => {
       })
     }
 
-    const passwordHash = await cryptoManeger.pass.hash(value.password)
+    let newPassword = admin.password;
+    if (value.password) {
+      newPassword = await cryptoManeger.pass.hash(value.password);
+    }
 
     const updatedAdmin = {
       name: value.name || admin.name,
       username: value.username || admin.username,
       phone: value.phone || admin.phone,
-      password: passwordHash || admin.password,
+      password: newPassword,
       role: value.role || admin.role
     }
 
-    if (req.file) {
-      const { error: imgError, value } = imageSchema.validate(req.file, { abortEarly: false })
-      if (imgError) {
-        return res.status(400).send({
-          success: false,
-          error: imgError.details[0].message
-        })
-      }
-
+    if (value.image) {
       if (admin.image_path) {
-        await storage.delete(admin.image_path)
+        await storage.delete(admin.image_path);
       }
-
-      const image = await storage.upload(req.file)
-      updatedAdmin.image_path = image.path
-      updatedAdmin.image = image.url
+      const image = await storage.upload(req.file);
+      updatedAdmin.image_path = image.path;
+      updatedAdmin.image = image.url;
     }
+
 
     await prisma.admins.update({
       where: { id },

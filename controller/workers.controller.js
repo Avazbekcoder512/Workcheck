@@ -1,6 +1,5 @@
 import storage from "../helper/supabase.js"
 import prisma from "../prisma/setup.js"
-import { imageSchema } from "../validator/imageValidator/imageValidate.js"
 import workerCreateSchema from "../validator/workerValidator/createValidate.js"
 import updateWorkerSchema from "../validator/workerValidator/updateValidate.js"
 
@@ -8,8 +7,16 @@ import updateWorkerSchema from "../validator/workerValidator/updateValidate.js"
 
 const workerCreate = async (req, res) => {
     try {
+        if (!req.file) {
+            return res.status(400).send({
+                success: false,
+                error: req.__('error.image_required')
+            });
+        }
+
+        const payload = { ...req.body, image: req.file }
         const schema = workerCreateSchema(req)
-        const { error, value } = schema.validate(req.body, { abortEarly: false })
+        const { error, value } = schema.validate(payload, { abortEarly: false })
 
         if (error) {
             return res.status(400).send({
@@ -25,22 +32,7 @@ const workerCreate = async (req, res) => {
             })
         }
 
-        if (req.file) {
-            const { error, value } = imageSchema.validate(req.file, { abortEarly: true })
-            if (error) {
-                return res.status(400).send({
-                    success: false,
-                    error: error.details[0].message,
-                });
-            }
-        } else {
-            return res.status(400).send({
-                success: false,
-                error: req.__('error.image_required')
-            })
-        }
-
-        const image = await storage.upload(req.file)
+        const imageUpload = await storage.upload(req.file)
 
         await prisma.workers.create({
             data: {
@@ -52,8 +44,8 @@ const workerCreate = async (req, res) => {
                 passport: value.passport,
                 phone: value.passport,
                 is_active: value.is_active,
-                image: image.url,
-                image_path: image.path
+                image: imageUpload.url,
+                image_path: imageUpload.path
             }
         })
 
@@ -71,7 +63,7 @@ const workerCreate = async (req, res) => {
 const getAllWorkers = async (req, res) => {
     try {
         const workers = await prisma.workers.findMany({
-            orderBy: {id: "asc"}
+            orderBy: { id: "asc" }
         })
 
         if (workers.length == 0) {
@@ -142,8 +134,10 @@ const workerUpdate = async (req, res) => {
                 error: req.__('worker.not_found')
             })
         }
+
+        const payload = { ...req.body, image: req.file }
         const schema = updateWorkerSchema(req)
-        const { error, value } = schema.validate(req.body)
+        const { error, value } = schema.validate(payload, { abortEarly: false })
 
         if (error) {
             return res.status(400).send({
@@ -170,22 +164,13 @@ const workerUpdate = async (req, res) => {
             is_active: value.is_active || worker.is_active
         }
 
-        if (req.file) {
-            const { error: imgError, value } = imageSchema.validate(req.file, { abortEarly: false })
-            if (imgError) {
-                return res.status(400).send({
-                    success: false,
-                    error: imgError.details[0].message
-                })
+        if (value.image) {
+            if (admin.image_path) {
+                await storage.delete(worker.image_path);
             }
-
-            if (worker.image_path) {
-                await storage.delete(worker.image_path)
-            }
-
-            const image = await storage.upload(req.file)
-            updatedWorker.image_path = image.path
-            updatedWorker.image = image.url
+            const imageUpload = await storage.upload(req.file);
+            updatedWorker.image_path = imageUpload.path;
+            updatedWorker.image = imageUpload.url;
         }
 
         await prisma.workers.update({
