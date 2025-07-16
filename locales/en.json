@@ -22,11 +22,7 @@
 		"role_empty": "Please enter the role!",
 		"role_only": "Role must be either ADMIN or SUPERADMIN!",
 		"role_required": "Role is a required field!",
-		"username": {
-			"string": "validation.username.string"
-		},
-		"required": "validation.required",
-		"role_string": "validation.role_string"
+		"image_type": "The image is in the wrong format!"
 	},
 	"error": {
 		"value": "Please fill in all the fields!",

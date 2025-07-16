@@ -185,10 +185,13 @@ export const updateAdmin = async (req, res) => {
       })
     }
 
+    const passwordHash = await cryptoManeger.pass.hash(value.password)
+
     const updatedAdmin = {
       name: value.name || admin.name,
       username: value.username || admin.username,
       phone: value.phone || admin.phone,
+      password: passwordHash || admin.password,
       role: value.role || admin.role
     }
 
@@ -225,52 +228,52 @@ export const updateAdmin = async (req, res) => {
   }
 }
 
-export const updatePassword = async (req, res) => {
-  try {
-    const id = Number(req.params.id)
+// export const updatePassword = async (req, res) => {
+//   try {
+//     const id = Number(req.params.id)
 
-    if (isNaN(id)) {
-      return res.status(400).send({
-        success: false,
-        error: req.__('error.id')
-      });
-    }
+//     if (isNaN(id)) {
+//       return res.status(400).send({
+//         success: false,
+//         error: req.__('error.id')
+//       });
+//     }
 
-    const admin = await prisma.admins.findFirst({ where: { id } })
+//     const admin = await prisma.admins.findFirst({ where: { id } })
 
-    if (!admin) {
-      return res.status(404).send({
-        success: false,
-        error: req.__('error.admin_not_found')
-      })
-    }
+//     if (!admin) {
+//       return res.status(404).send({
+//         success: false,
+//         error: req.__('error.admin_not_found')
+//       })
+//     }
 
-    const schema = updatePassSchema(req)
-    const { error, value } = schema.validate(req.body, { abortEarly: false })
+//     const schema = updatePassSchema(req)
+//     const { error, value } = schema.validate(req.body, { abortEarly: false })
 
-    if (error) {
-      return res.status(400).send({
-        success: false,
-        error: error.details[0].message,
-      });
-    }
+//     if (error) {
+//       return res.status(400).send({
+//         success: false,
+//         error: error.details[0].message,
+//       });
+//     }
 
-    const passwordHash = await cryptoManeger.pass.hash(value.password)
+//     const passwordHash = await cryptoManeger.pass.hash(value.password)
 
-    await prisma.admins.update({
-      where: { id },
-      data: { password: passwordHash }
-    })
+//     await prisma.admins.update({
+//       where: { id },
+//       data: { password: passwordHash }
+//     })
 
-    return res.status(200).send({
-      success: true,
-      error: false,
-      message: req.__('success.update_password')
-    })
-  } catch (error) {
-    throw error
-  }
-}
+//     return res.status(200).send({
+//       success: true,
+//       error: false,
+//       message: req.__('success.update_password')
+//     })
+//   } catch (error) {
+//     throw error
+//   }
+// }
 
 export const deleteAdmin = async (req, res) => {
   try {
