@@ -40,4 +40,12 @@ const profile = async (req, res) => {
     }
 }
 
+const updateProfile = async (req, res) => {
+    try {
+        
+    } catch (error) {
+        throw error
+    }
+}
+
 export { profile }

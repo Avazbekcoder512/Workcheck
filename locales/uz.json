@@ -22,11 +22,7 @@
 		"role_empty": "Roleni kiriting!",
 		"role_only": "Role faqat ADMIN yoki SUPERADMIN bo‘lishi mumkin!",
 		"role_required": "Role majburiy maydon!",
-		"username": {
-			"string": "validation.username.string"
-		},
-		"required": "validation.required",
-		"role_string": "validation.role_string"
+		"image_type": "Rasm noto'g'ri formatda!"
 	},
 	"error": {
 		"value": "Barcha maydonlarni toʻldiring!",

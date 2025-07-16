@@ -22,11 +22,7 @@
 		"role_empty": "Пожалуйста, введите роль!",
 		"role_only": "Роль может быть только ADMIN или SUPERADMIN!",
 		"role_required": "Роль является обязательным полем!",
-		"username": {
-			"string": "validation.username.string"
-		},
-		"required": "validation.required",
-		"role_string": "validation.role_string"
+		"image_type": "Изображение имеет неправильный формат!"
 	},
 	"error": {
 		"value": "Пожалуйста, заполните все поля!",
