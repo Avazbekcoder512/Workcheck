@@ -130,7 +130,7 @@ const refresh = async (req, res) => {
                 });
             }
 
-            const admin = await prisma.admins.findFirst({
+            const admin = await prisma.admins.findUnique({
                 where: {
                     id
                 }
@@ -219,7 +219,7 @@ const indetification = async (req, res, next) => {
 
     if (decode.id) {
         const id = Number(decode.id)
-        const admin = await prisma.admins.findFirst({
+        const admin = await prisma.admins.findUnique({
             where: {
                 id
             }

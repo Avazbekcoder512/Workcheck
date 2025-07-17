@@ -13,7 +13,7 @@ const profile = async (req, res) => {
             });
         }
 
-        const admin = await prisma.admins.findFirst({
+        const admin = await prisma.admins.findUnique({
             where: { id },
             select: {
                 id: true,

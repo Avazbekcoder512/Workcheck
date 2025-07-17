@@ -106,7 +106,7 @@ export const getOneAdmin = async (req, res) => {
       });
     }
 
-    const admin = await prisma.admins.findFirst({
+    const admin = await prisma.admins.findUnique({
       where: { id },
       select: {
         id: true,
@@ -146,7 +146,7 @@ export const updateAdmin = async (req, res) => {
       });
     }
 
-    const admin = await prisma.admins.findFirst({
+    const admin = await prisma.admins.findUnique({
       where: {
         id
       }
@@ -273,7 +273,7 @@ export const deleteAdmin = async (req, res) => {
       });
     }
 
-    const admin = await prisma.admins.findFirst({
+    const admin = await prisma.admins.findUnique({
       where: { id }
     })
 
