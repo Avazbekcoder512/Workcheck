@@ -38,7 +38,8 @@
 		"token_not_found": "Token not found!",
 		"login": "Iltimos qayta kirish qiling!",
 		"not_allowed": "Sizga ruxsat yoʻq!",
-		"server": "Serverda ichki xatolik!"
+		"server": "Serverda ichki xatolik!",
+		"profile_not_found": "Sizning ma'lumotlaringiz topilmadi!"
 	},
 	"success": {
 		"admin_create": "Admin muvaffaqiyatli yaratildi!",
@@ -47,7 +48,8 @@
 		"admin_delete": "Admin muvaffaqiyatli o'chirildi!",
 		"login": "Kirish muvaffaqiyatli amalga oshirildi!",
 		"refresh_token": "Token muvaffaqiyatli yangilandi!",
-		"logout": "Chiqish muvaffaqiyatli amalga oshirildi!"
+		"logout": "Chiqish muvaffaqiyatli amalga oshirildi!",
+		"profile": "Ma'lumotlaringiz muvaffaqiyatli yangilandi!"
 	},
 	"worker": {
 		"fullname_string": "Xodimning Familiyasi, Ismi va Sharifini matnda kiriting!",
