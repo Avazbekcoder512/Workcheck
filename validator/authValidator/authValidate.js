@@ -19,14 +19,14 @@ export const loginSchema = (req) => {
     })
 }
 
-export const updatePassSchema = (req) => {
-    return Joi.object({
-        password: Joi.string().empty('').min(8).max(15).trim().required().messages({
-            'string.base': req.__('validation.password_string'),
-            'string.empty': req.__('validation.password_empty'),
-            'string.min': req.__('validation.password_min'),
-            'string.max': req.__('validation.password_max'),
-            'any.required': req.__('validation.password_required')
-        })
-    })
-}
+// export const updatePassSchema = (req) => {
+//     return Joi.object({
+//         password: Joi.string().empty('').min(8).max(15).trim().required().messages({
+//             'string.base': req.__('validation.password_string'),
+//             'string.empty': req.__('validation.password_empty'),
+//             'string.min': req.__('validation.password_min'),
+//             'string.max': req.__('validation.password_max'),
+//             'any.required': req.__('validation.password_required')
+//         })
+//     })
+// }

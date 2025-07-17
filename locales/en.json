@@ -38,7 +38,8 @@
 		"token_not_found": "Token not found!",
 		"login": "Please log in again!",
 		"not_allowed": "You are not authorized!",
-		"server": "Internal server error!"
+		"server": "Internal server error!",
+		"profile_not_found": "Your information was not found!"
 	},
 	"success": {
 		"admin_create": "Admin created successfully!",
@@ -47,7 +48,8 @@
 		"admin_delete": "Admin deleted successfully!",
 		"login": "Login successful!",
 		"refresh_token": "Token refreshed successfully!",
-		"logout": "Logout successful!"
+		"logout": "Logout successful!",
+		"profile": "Your information has been successfully updated!"
 	},
 	"worker": {
 		"fullname_string": "Employee full name must be a string!",

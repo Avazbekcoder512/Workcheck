@@ -3,8 +3,6 @@ import prisma from "../prisma/setup.js"
 import workerCreateSchema from "../validator/workerValidator/createValidate.js"
 import updateWorkerSchema from "../validator/workerValidator/updateValidate.js"
 
-
-
 const workerCreate = async (req, res) => {
     try {
         if (!req.file) {
@@ -95,7 +93,7 @@ const getOneWorker = async (req, res) => {
             })
         }
 
-        const worker = await prisma.workers.findFirst({ where: { id } })
+        const worker = await prisma.workers.findUnique({ where: { id } })
 
         if (!worker) {
             return res.status(404).send({
@@ -126,7 +124,7 @@ const workerUpdate = async (req, res) => {
             })
         }
 
-        const worker = await prisma.workers.findFirst({ where: { id } })
+        const worker = await prisma.workers.findUnique({ where: { id } })
 
         if (!worker) {
             return res.status(404).send({
@@ -165,7 +163,7 @@ const workerUpdate = async (req, res) => {
         }
 
         if (value.image) {
-            if (admin.image_path) {
+            if (worker.image_path) {
                 await storage.delete(worker.image_path);
             }
             const imageUpload = await storage.upload(req.file);
@@ -200,7 +198,7 @@ const deleteWorker = async (req, res) => {
             })
         }
 
-        const worker = await prisma.workers.findFirst({ where: { id } })
+        const worker = await prisma.workers.findUnique({ where: { id } })
 
         if (!worker) {
             return res.status(404).send({
