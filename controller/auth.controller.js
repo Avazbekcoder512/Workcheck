@@ -72,7 +72,8 @@ const authentication = async (req, res) => {
             success: true,
             error: false,
             message: req.__('success.login'),
-            token
+            token,
+            role: admin.role
         })
     } catch (error) {
         throw error;

@@ -35,7 +35,7 @@ export const adminCreate = async (req, res) => {
 
     const imageUpload = await storage.upload(req.file);
 
-    const { name, username, password, phone, role } = value;
+    const { name, username, password, phone, role, branchId  } = value;
 
     const existingAdmin = await prisma.admins.findFirst({
       where: { OR: [{ username }, { phone }] }
@@ -51,7 +51,16 @@ export const adminCreate = async (req, res) => {
     const passwordHash = await cryptoManeger.pass.hash(password);
 
     const admin = await prisma.admins.create({
-      data: { name, username, password: passwordHash, phone, role, image: imageUpload.url, image_path: imageUpload.path },
+      data: {
+        name,
+        username,
+        password: passwordHash,
+        phone,
+        role,
+        branchId,
+        image: imageUpload.url,
+        image_path: imageUpload.path
+      },
     });
 
     return res.status(201).send({
@@ -187,7 +196,8 @@ export const updateAdmin = async (req, res) => {
       username: value.username || admin.username,
       phone: value.phone || admin.phone,
       password: newPassword,
-      role: value.role || admin.role
+      role: value.role || admin.role,
+      branchId: value.branchId || admin.branchId
     }
 
     if (value.image) {
