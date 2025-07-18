@@ -41,6 +41,7 @@ const workerCreate = async (req, res) => {
                 age: value.gender,
                 passport: value.passport,
                 phone: value.passport,
+                branchId: value.branchId,
                 is_active: value.is_active,
                 image: imageUpload.url,
                 image_path: imageUpload.path
@@ -159,6 +160,7 @@ const workerUpdate = async (req, res) => {
             age: value.age || worker.age,
             gender: value.gender || worker.gender,
             passport: value.passport || worker.passport,
+            branchId: value.branchId || worker.branchId,
             is_active: value.is_active || worker.is_active
         }
 

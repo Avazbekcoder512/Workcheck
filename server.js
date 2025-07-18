@@ -41,10 +41,10 @@ const io = new Server(server, {
 app.use((error, req, res, next) => {
   console.log(error);
 
-  if (err.message === "Faqat rasm fayllarga ruxsat beriladi") {
+  if (error.message === "Faqat rasm fayllarga ruxsat beriladi") {
     return res.status(400).json({ success: false, error: req.__('validation.image_type') });
   }
-
+  
   return res.status(500).send({
     success: false,
     error: req.__('error.server'),
