@@ -1,7 +1,6 @@
 import prisma from "../prisma/setup.js"
 import { createBranchSchema, updateBranchSchema } from "../validator/branch/branchvalidate.js"
 
-
 const createBranch = async (req, res) => {
     try {
         const schema = createBranchSchema(req)

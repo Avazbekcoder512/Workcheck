@@ -33,7 +33,7 @@ model Admins {
   phone      String   @unique @db.VarChar(20)
   role       Role
   branchId   Int?
-  branch     Branch?   @relation(fields: [branchId], references: [id])
+  branch     Branch?  @relation(fields: [branchId], references: [id])
   image      String?  @db.Text
   image_path String?  @db.Text
   createdAt  DateTime @default(now()) @db.Timestamp(6)
@@ -82,3 +82,23 @@ model Branch {
   admins    Admins[]
   workers   Workers[]
 }
+
+// model Break {
+//   id        Int      @id @default(autoincrement())
+//   name      String   @db.VarChar(255)
+//   startTime DateTime @db.Time()
+//   endTime   DateTime @db.Time()
+// }
+
+// model DayOff {
+//   id   Int      @id @default(autoincrement())
+//   name String   @db.VarChar(255)
+//   day  DateTime @db.Date
+// }
+
+// model Shift {
+//   id        Int      @id @default(autoincrement())
+//   name      String   @db.VarChar(255)
+//   startTime DateTime @db.Time()
+//   endTime   DateTime @db.Time()
+// }

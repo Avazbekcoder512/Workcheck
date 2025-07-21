@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const createBranchSchema = (req) => {
+const createBranchSchema = (req) => {
     return Joi.object({
         name: Joi.string().empty().required().messages({
             'string.base': req.__('validation.branch_name_string'),
@@ -10,7 +10,7 @@ export const createBranchSchema = (req) => {
     })
 }
 
-export const updateBranchSchema = (req) => {
+const updateBranchSchema = (req) => {
     return Joi.object({
         name: Joi.string().empty().required().messages({
             'string.base': req.__('validation.branch_name_string'),
@@ -19,3 +19,5 @@ export const updateBranchSchema = (req) => {
         })
     })
 }
+
+export { createBranchSchema, updateBranchSchema}
