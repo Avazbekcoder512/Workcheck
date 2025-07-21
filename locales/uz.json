@@ -18,7 +18,7 @@
 		"phone_string": "Telefon raqam faqat matn boʻlishi kerak!",
 		"phone_empty": "Telefon raqamni kiriting!",
 		"phone_required": "Telefon raqam majburiy maydon!",
-		"role_strnig": "Role faqat matn boʻlishi kerak!",
+		"role_string": "Role faqat matn boʻlishi kerak!",
 		"role_empty": "Roleni kiriting!",
 		"role_only": "Role faqat ADMIN yoki SUPERADMIN bo‘lishi mumkin!",
 		"role_required": "Role majburiy maydon!",
@@ -26,11 +26,9 @@
 		"branch_name_string": "Filial nomi matn bo'lishi kerak!",
 		"branch_name_empty": "Filial nomi bo'sh bo'lmasligi kerak!",
 		"branch_name_required": "Filial nomini kiriting!",
-		"username": {
-			"string": "validation.username.string"
-		},
-		"required": "validation.required",
-		"role_string": "validation.role_string"
+		"branchId_string": "FilialIdsini matnda kiriting!",
+		"branchId_empty": "FilialIdsi bo'sh bo'lmasligi kerak!",
+		"branchId_required": "FilialIdsi talab qilinadi!"
 	},
 	"error": {
 		"value": "Barcha maydonlarni toʻldiring!",
@@ -49,7 +47,8 @@
 		"server": "Serverda ichki xatolik!",
 		"profile_not_found": "Sizning ma'lumotlaringiz topilmadi!",
 		"branches_not_found": "Filiallar topilmadi!",
-		"branch_not_found": "Filial topilmadi!"
+		"branch_not_found": "Filial topilmadi!",
+		"branchId": "FilialId noto'g'ri formatda!"
 	},
 	"success": {
 		"admin_create": "Admin muvaffaqiyatli yaratildi!",

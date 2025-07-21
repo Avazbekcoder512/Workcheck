@@ -35,7 +35,7 @@ export const adminCreate = async (req, res) => {
 
     const imageUpload = await storage.upload(req.file);
 
-    const { name, username, password, phone, role, branchId  } = value;
+    const { name, username, password, phone, role, branchId } = value;
 
     const existingAdmin = await prisma.admins.findFirst({
       where: { OR: [{ username }, { phone }] }
@@ -48,6 +48,24 @@ export const adminCreate = async (req, res) => {
       });
     }
 
+    const branch_Id = Number(branchId)
+
+    if (isNaN(branch_Id)) {
+      return res.status(400).send({
+        success: false,
+        error: req.__('error.branchId')
+      })
+    }
+
+    const branch = await prisma.branch.findUnique({ where: { id: branch_Id } })
+
+    if (!branch) {
+      return res.status(404).send({
+        success: false,
+        error: req.__('error.branch_not_found')
+      })
+    }
+
     const passwordHash = await cryptoManeger.pass.hash(password);
 
     const admin = await prisma.admins.create({
@@ -57,7 +75,7 @@ export const adminCreate = async (req, res) => {
         password: passwordHash,
         phone,
         role,
-        branchId,
+        branchId: branch_Id,
         image: imageUpload.url,
         image_path: imageUpload.path
       },
@@ -189,6 +207,25 @@ export const updateAdmin = async (req, res) => {
     let newPassword = admin.password;
     if (value.password) {
       newPassword = await cryptoManeger.pass.hash(value.password);
+    }    
+
+    const branch_Id = Number(value.branchId)
+
+    if (isNaN(branch_Id)) {
+      return res.status(400).send({
+        success: false,
+        error: req.__('error.branchId')
+      })
+    }
+
+    const branch = await prisma.branch.findUnique({
+      where: { id: branch_Id } })
+
+    if (!branch) {
+      return res.status(404).send({
+        success: false,
+        error: req.__('error.branch_not_found')
+      })
     }
 
     const updatedAdmin = {
@@ -197,7 +234,7 @@ export const updateAdmin = async (req, res) => {
       phone: value.phone || admin.phone,
       password: newPassword,
       role: value.role || admin.role,
-      branchId: value.branchId || admin.branchId
+      branchId: branch_Id || admin.branchId
     }
 
     if (value.image) {

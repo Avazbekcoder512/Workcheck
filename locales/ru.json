@@ -18,7 +18,7 @@
 		"phone_string": "Номер телефона должен быть строкой!",
 		"phone_empty": "Пожалуйста, введите номер телефона!",
 		"phone_required": "Номер телефона является обязательным полем!",
-		"role_strnig": "Роль должна быть строкой!",
+		"role_string": "Роль должна быть строкой!",
 		"role_empty": "Пожалуйста, введите роль!",
 		"role_only": "Роль может быть только ADMIN или SUPERADMIN!",
 		"role_required": "Роль является обязательным полем!",
@@ -26,11 +26,10 @@
 		"branch_name_string": "Название филиала должно быть строкой!",
 		"branch_name_empty": "Название филиала не должно быть пустым!",
 		"branch_name_required": "Пожалуйста, введите название филиала!",
-		"username": {
-			"string": "validation.username.string"
-		},
-		"required": "validation.required",
-		"role_string": "validation.role_string"
+		"branchId_string": "ID филиала должен быть строкой!",
+		"branchId_empty": "ID филиала не должен быть пустым!",
+		"branchId_required": "ID филиала обязателен!",
+		"branchId": "Неверный формат ID филиала!"
 	},
 	"error": {
 		"value": "Пожалуйста, заполните все поля!",

@@ -18,7 +18,7 @@
 		"phone_string": "Phone number must be a string!",
 		"phone_empty": "Please enter the phone number!",
 		"phone_required": "Phone number is a required field!",
-		"role_strnig": "Role must be a string!",
+		"role_string": "Role must be a string!",
 		"role_empty": "Please enter the role!",
 		"role_only": "Role must be either ADMIN or SUPERADMIN!",
 		"role_required": "Role is a required field!",
@@ -26,11 +26,9 @@
 		"branch_name_string": "Branch name must be a string!",
 		"branch_name_empty": "Branch name cannot be empty!",
 		"branch_name_required": "Please enter the branch name!",
-		"username": {
-			"string": "validation.username.string"
-		},
-		"required": "validation.required",
-		"role_string": "validation.role_string"
+		"branchId_string": "Branch ID must be a string!",
+		"branchId_empty": "Branch ID cannot be empty!",
+		"branchId_required": "Branch ID is required!"
 	},
 	"error": {
 		"value": "Please fill in all the fields!",
@@ -49,7 +47,8 @@
 		"server": "Internal server error!",
 		"profile_not_found": "Your information was not found!",
 		"branches_not_found": "Branches not found!",
-		"branch_not_found": "Branch not found!"
+		"branch_not_found": "Branch not found!",
+		"branchId": "Branch ID is in an invalid format!"
 	},
 	"success": {
 		"admin_create": "Admin created successfully!",
