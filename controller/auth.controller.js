@@ -93,7 +93,7 @@ const refresh = async (req, res) => {
 
         const decoded = cryptoManeger.refresh.verify(refreshToken)
 
-        if (!decoded === undefined) {
+        if (decoded === undefined) {
             return res.status(403).send({
                 success: false,
                 error: req.__('error.forbidden')
