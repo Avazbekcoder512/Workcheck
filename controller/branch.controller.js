@@ -1,5 +1,5 @@
 import prisma from "../prisma/setup.js"
-import { createBranchSchema, updateBranchSchema } from "../validator/branch/branchvalidate.js"
+import { createBranchSchema, updateBranchSchema } from "../validator/branch/branchValidate.js"
 
 const createBranch = async (req, res) => {
     try {
