@@ -7,7 +7,7 @@ export const AdminCreateSchema = (req) => {
             'string.empty': req.__('validation.name_empty'),
             'string.min': req.__('validation.name_min'),
             'string.max': req.__('validation.name_max'),
-            'any.required': req.__('validation.required')
+            'any.required': req.__('validation.name_required')
         }),
         username: Joi.string().min(3).max(255).empty('').trim().required().messages({
             'string.base': req.__('validation.username_string'),
@@ -27,6 +27,11 @@ export const AdminCreateSchema = (req) => {
             'string.base': req.__('validation.phone_string'),
             'string.empty': req.__('validation.phone_empty'),
             'any.required': req.__('validation.phone_required')
+        }),
+        branchId: Joi.string().empty('').required().messages({
+            'string.base': req.__('validation.branchId_string'),
+            'string.empty': req.__('validation.branchId_empty'),
+            'any.required': req.__('validation.branchId_required')
         }),
         role: Joi.string().empty('').valid("ADMIN", "SUPERADMIN").required().messages({
             'string.base': req.__('validation.role_string'),

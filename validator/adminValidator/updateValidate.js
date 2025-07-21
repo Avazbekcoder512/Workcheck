@@ -28,6 +28,10 @@ export const updateAdminSchema = (req) => {
             'string.base': req.__('validation.role_string'),
             'any.only': req.__('validation.role_only'),
         }),
+        branchId: Joi.string().empty('').messages({
+            'string.base': req.__('validation.branchId_string'),
+            'string.empty': req.__('validation.branchId_empty')
+        }),
         image: Joi.object({
             originalname: Joi.string()
                 .pattern(/\.(jpg|jpeg|png|svg|avf|webp)$/i)

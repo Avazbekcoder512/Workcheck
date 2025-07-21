@@ -14,7 +14,7 @@ const workerCreateSchema = (req) => {
             'string.base': req.__('worker.position_string'),
             'string.empty': req.__('worker.position_empty'),
             'string.max': req.__('worker.position_max'),
-            'any.required': req.__('position_required')
+            'any.required': req.__('worker.position_required')
         }),
         salary: Joi.number().integer().empty().required().messages({
             'number.base': req.__('worker.salary_number'),

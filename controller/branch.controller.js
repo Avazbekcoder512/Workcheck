@@ -38,13 +38,13 @@ const createBranch = async (req, res) => {
 
 const getAllBranches = async (req, res) => {
     try {
-        const branchs = await prisma.branch.findMany({
+        const branches = await prisma.branch.findMany({
             orderBy: {
                 id: 'asc'
             }
         })
 
-        if (branchs.length == 0) {
+        if (branches.length == 0) {
             return res.status(404).send({
                 success: false,
                 error: req.__('error.branches_not_found')
@@ -54,7 +54,7 @@ const getAllBranches = async (req, res) => {
         return res.status(200).send({
             success: true,
             error: false,
-            branchs
+            branches
         })
     } catch (error) {
         throw error
@@ -72,7 +72,7 @@ const getOneBranch = async (req, res) => {
             })
         }
 
-        const branch = await prisma.branch.findUnique({ where: { id } })
+        const branch = await prisma.branch.findUnique({ where: { id }, include: { admins: true } })
 
         if (!branch) {
             return res.status(404).send({
