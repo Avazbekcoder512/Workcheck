@@ -52,6 +52,6 @@ app.use((error, req, res, next) => {
 });
 
 const Port = PORT || 3000;
-server.listen(Port, () => {
+server.listen(Port, '0.0.0.0', () => {
   console.log(`Server ishga tushdi... Port:${Port}`);
 });
