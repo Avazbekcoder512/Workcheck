@@ -6,15 +6,6 @@ import { loginSchema } from "../validator/authValidator/authValidate.js";
 const authentication = async (req, res) => {
     try {
         let ip = req.ip;
-        // if (ip.startsWith('::ffff:')) ip = ip.split('::ffff:')[1];
-
-        let clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-
-        // If X-Forwarded-For contains multiple IPs (e.g., from multiple proxies),
-        // take the first one (the client's original IP).
-        // if (clientIp && clientIp.includes(',')) {
-        //     clientIp = clientIp.split(',')[0].trim();
-        // }
 
         const schema = loginSchema(req)
         const { error, value } = schema.validate(req.body, {
@@ -45,7 +36,7 @@ const authentication = async (req, res) => {
         if (!admin) {
             return res.status(404).send({
                 success: false,
-                error: req.__('error.admin_not_found')
+                error: req.__('error.username')
             })
         }
 
@@ -86,7 +77,6 @@ const authentication = async (req, res) => {
             token,
             ip,
             role: admin.role,
-            clientIp
         })
     } catch (error) {
         throw error;

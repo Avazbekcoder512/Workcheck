@@ -93,8 +93,18 @@ export const adminCreate = async (req, res) => {
 
 export const getAllAdmins = async (req, res) => {
   try {
+    const q = req.query.q
+    const filters = []
+
+    if (q) {
+      filters.push(
+        { name: { contains: q, mode: 'insensitive' } },
+        { username: { contains: q, mode: 'insensitive' } }
+      )
+    }
     const admins = await prisma.admins.findMany({
-      orderBy: { id: "asc" },
+      where: filters.length > 0 ? { OR: filters } : {},
+      orderBy: { role: "desc" },
       select: {
         id: true,
         name: true,
@@ -204,10 +214,26 @@ export const updateAdmin = async (req, res) => {
       })
     }
 
+    if (value.username && value.username !== admin.username) {
+      const existing = await prisma.admins.findFirst({
+        where: {
+          username: value.username,
+          NOT: { id: id }
+        }
+      });
+
+      if (existing) {
+        return res.status(400).send({
+          success: false,
+          error: req.__('error.existing_admin')
+        });
+      }
+    }
+
     let newPassword = admin.password;
     if (value.password) {
       newPassword = await cryptoManeger.pass.hash(value.password);
-    }    
+    }
 
     const branch_Id = Number(value.branchId)
 
@@ -219,7 +245,8 @@ export const updateAdmin = async (req, res) => {
     }
 
     const branch = await prisma.branch.findUnique({
-      where: { id: branch_Id } })
+      where: { id: branch_Id }
+    })
 
     if (!branch) {
       return res.status(404).send({
