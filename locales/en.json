@@ -37,6 +37,7 @@
 		"admins_not_found": "Admins not found!",
 		"id": "Invalid ID format!",
 		"admin_not_found": "Admin not found!",
+		"username": "Invalid username",
 		"password": "Incorrect password!",
 		"forbidden": "Forbidden error!",
 		"refresh_not_found": "Refresh token is missing!",

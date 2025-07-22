@@ -28,7 +28,7 @@ export const updateAdminSchema = (req) => {
             'string.base': req.__('validation.role_string'),
             'any.only': req.__('validation.role_only'),
         }),
-        branchId: Joi.string().empty('').messages({
+        branchId: Joi.string().empty('').optional().messages({
             'string.base': req.__('validation.branchId_string'),
             'string.empty': req.__('validation.branchId_empty')
         }),

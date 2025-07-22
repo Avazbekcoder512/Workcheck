@@ -38,6 +38,7 @@
 		"admins_not_found": "Администраторы не найдены!",
 		"id": "Неверный формат ID!",
 		"admin_not_found": "Администратор не найден!",
+		"username": "Неверное имя пользователя",
 		"password": "Неверный пароль!",
 		"forbidden": "Ошибка доступа (Forbidden)!",
 		"refresh_not_found": "Отсутствует refresh-токен!",
