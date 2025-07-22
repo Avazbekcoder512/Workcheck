@@ -5,7 +5,7 @@ import { loginSchema } from "../validator/authValidator/authValidate.js";
 
 const authentication = async (req, res) => {
     try {
-        let ip = req.socket.remoteAddress;
+        let ip = req.ip;
         // if (ip.startsWith('::ffff:')) ip = ip.split('::ffff:')[1];
 
         let clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
