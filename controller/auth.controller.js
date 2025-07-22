@@ -5,6 +5,7 @@ import { loginSchema } from "../validator/authValidator/authValidate.js";
 
 const authentication = async (req, res) => {
     try {
+        const ip = req.ip        
         const schema = loginSchema(req)
         const { error, value } = schema.validate(req.body, {
             abortEarly: false,
@@ -73,6 +74,7 @@ const authentication = async (req, res) => {
             error: false,
             message: req.__('success.login'),
             token,
+            ip,
             role: admin.role
         })
     } catch (error) {
