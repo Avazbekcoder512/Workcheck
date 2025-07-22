@@ -8,6 +8,14 @@ const authentication = async (req, res) => {
         let ip = req.socket.remoteAddress;
         // if (ip.startsWith('::ffff:')) ip = ip.split('::ffff:')[1];
 
+        let clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+        // If X-Forwarded-For contains multiple IPs (e.g., from multiple proxies),
+        // take the first one (the client's original IP).
+        if (clientIp && clientIp.includes(',')) {
+            clientIp = clientIp.split(',')[0].trim();
+        }
+
         const schema = loginSchema(req)
         const { error, value } = schema.validate(req.body, {
             abortEarly: false,
@@ -77,7 +85,8 @@ const authentication = async (req, res) => {
             message: req.__('success.login'),
             token,
             ip,
-            role: admin.role
+            role: admin.role,
+            clientIp
         })
     } catch (error) {
         throw error;
