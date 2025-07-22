@@ -5,7 +5,9 @@ import { loginSchema } from "../validator/authValidator/authValidate.js";
 
 const authentication = async (req, res) => {
     try {
-        const ip = req.ip        
+        // const ip = req.ip;
+        const ip =  req.connection.remoteAddress;
+
         const schema = loginSchema(req)
         const { error, value } = schema.validate(req.body, {
             abortEarly: false,
