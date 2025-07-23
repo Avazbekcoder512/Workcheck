@@ -83,6 +83,24 @@ model Branch {
   workers   Workers[]
 }
 
+model LoginAttempt {
+  id        Int      @id @default(autoincrement())
+  username  String?  @db.VarChar(255)
+  ipAddress String?  @db.VarChar(255)
+  success   Boolean
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+}
+
+model LoginBlock {
+  id           Int      @id @default(autoincrement())
+  username     String?  @db.VarChar(255)
+  ipAddress    String?  @db.VarChar(255)
+  blockedUntil DateTime
+  failLevel    Int      @default(0)
+  createdAt    DateTime @default(now()) @db.Timestamp(6)
+  updatedAt    DateTime @updatedAt @db.Timestamp(6)
+}
+
 // model Break {
 //   id        Int      @id @default(autoincrement())
 //   name      String   @db.VarChar(255)
