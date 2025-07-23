@@ -111,7 +111,8 @@ export const getAllAdmins = async (req, res) => {
         username: true,
         phone: true,
         role: true,
-        image: true
+        image: true,
+        branch: true
       }
     });
 
@@ -151,7 +152,8 @@ export const getOneAdmin = async (req, res) => {
         username: true,
         phone: true,
         role: true,
-        image: true
+        image: true,
+        branch: true
       }
     })
 
