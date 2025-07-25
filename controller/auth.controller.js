@@ -3,9 +3,17 @@ import { cryptoManeger } from "../helper/crypto.js";
 import prisma from "../prisma/setup.js";
 import { loginSchema } from "../validator/authValidator/authValidate.js";
 
-const authentication = async (req, res) => {
+const LEVEL_CONFIG = [
+    { maxAttempts: 5, blockDurationMs: 1 * 60 * 1000 },
+    { maxAttempts: 3, blockDurationMs: 1 * 60 * 1000 },
+    { maxAttempts: 2, blockDurationMs: 24 * 60 * 60 * 1000 },
+];
+
+const authentication = async (req, res, next) => {
     try {
-        // const ip = req.ip
+        const ip = req.ip
+        const now = new Date()
+
         const schema = loginSchema(req)
         const { error, value } = schema.validate(req.body, {
             abortEarly: false,
@@ -23,7 +31,6 @@ const authentication = async (req, res) => {
                 error: req.__('error.value')
             })
         }
-
         const { username, password } = value
 
         const admin = await prisma.admins.findFirst({
@@ -32,84 +39,92 @@ const authentication = async (req, res) => {
             }
         })
 
-        if (!admin) {
-            return res.status(404).send({
+        const key = admin ? { username: username, ipAddress: null } : { username: null, ipAddress: ip }
+
+        let block = await prisma.loginBlock.findFirst({ where: key })
+
+        if (block?.blockedUntil && block.blockedUntil > now) {
+            const secLeft = Math.ceil((block.blockedUntil - now) / 1000)
+            return res.status(429).send({
                 success: false,
-                error: req.__('error.username')
+                error: `Hozir bloklangansiz. Qolgan vaqt: ${secLeft} soniya.`,
             })
         }
+
+        // if (!admin) {
+        //     return res.status(404).send({
+        //         success: false,
+        //         error: req.__('error.username')
+        //     })
+        // }
 
         const verifypass = await cryptoManeger.pass.verify(password, admin.password)
 
-        if (!verifypass) {
-            return res.status(400).send({
-                success: false,
-                error: req.__('error.password')
+        await prisma.loginAttempt.create({
+            data: {
+                username: admin ? username : null.Date,
+                ipAddress: admin ? null : ip,
+                success: verifypass,
+            }
+        })
+
+        // if (!verifypass) {
+        //     return res.status(400).send({
+        //         success: false,
+        //         error: req.__('error.password')
+        //     })
+        // }
+
+        if (verifypass) {
+            if (block) {
+                await prisma.loginBlock.delete({ where: { id: block.id } })
+            }
+            return next()
+        }
+
+        if (!block) {
+            block = await prisma.loginBlock.create({
+                data: {
+                    ...key, failLevel: 0, attempts: 0, blockedUntil: null
+                }
             })
         }
 
-        // await prisma.loginAttempt.create({
-        //     data: {
-        //         username: admin.username,
-        //         ipAddress: ip,
-        //         success: verifypass
-        //     }
-        // })
+        const cfg = LEVEL_CONFIG[block.failLevel]
+        block.attempts += 1
 
-        // if (isCorrect) {
-        //     // 3️⃣ Muvaffaqiyatli bo‘lsa → blok yozuvlarini o‘chir va next()
-        //     await prisma.loginAttempt.deleteMany({
-        //         where: {
-        //             username: admin ? username : null,
-        //             ipAddress: ip
-        //         }
-        //     });
-        //     return next();
-        // }
+        if (block.attempts > cfg.maxAttempts) {
+            const nextLevel = Math.min(block.failLevel + 1, LEVEL_CONFIG.length - 1)
+            const nextCfg = LEVEL_CONFIG[nextLevel]
 
-        // // 4️⃣ Xato bo‘lsa → oxirgi 1 daqiqadagi xatolarni sanash
-        // const recentFails = await prisma.loginAttempt.count({
-        //     where: {
-        //         username: admin ? username : null,
-        //         ipAddress: ip,
-        //         success: false,
-        //         createdAt: { gte: subMinutes(new Date(), 1) }
-        //     }
-        // });
+            block = await prisma.loginBlock.update({
+                where: { id: block.id },
+                data: {
+                    failLevel: nextLevel,
+                    attempts: 0,
+                    blockedUntil: new Date(now.getTime() + nextCfg.blockDurationMs),
+                }
+            })
 
-        // // 5️⃣ Progresiv blok darajasini aniqlash
-        // let level = (req.block?.failLevel || 0);
-        // let timeoutMin = 0;
+            const secBlock = Math.ceil(nextCfg.blockDurationMs / 1000)
+            return res.status(429).send({
+                success: false,
+                error: `Ko‘p xato kirdingiz. Keyingi urinishingiz ${secBlock} soniyadan so‘ng.`,
+            })
+        }
 
-        // if (level === 0 && recentFails >= 5) { level = 1; timeoutMin = 15; }
-        // else if (level === 1 && recentFails >= 3) { level = 2; timeoutMin = 120; }
-        // else if (level === 2 && recentFails >= 2) { level = 3; timeoutMin = 60 * 24; }
-        // else if (level >= 3 && recentFails >= 2) { level = 4; timeoutMin = 60 * 72; }
+        await prisma.loginBlock.update({
+            where: { id: block.id },
+            data: { attempts: block.attempts }
+        })
 
-        // if (timeoutMin > 0) {
-        //     // 6️⃣ Blok yozuvini yangilash
-        //     await prisma.loginBlock.upsert({
-        //         where: {
-        //             username_ipAddress: {
-        //                 username: admin ? username : null,
-        //                 ipAddress: ip
-        //             }
-        //         },
-        //         update: {
-        //             blockedUntil: addMinutes(new Date(), timeoutMin),
-        //             failLevel: level
-        //         },
-        //         create: {
-        //             username: admin ? username : null,
-        //             ipAddress: ip,
-        //             blockedUntil: addMinutes(new Date(), timeoutMin),
-        //             failLevel: level
-        //         }
-        //     });
-        //     return res.status(429).json({
-        //         message: `Xatolik ko‘p: ${timeoutMin} daqiqa bloklandi.`
-        //     });
-        // }
+        const triesLeft = cfg.maxAttempts - block.attempts + 1;
+            res.status(401).json({
+            success: false,
+            error: `Parol noto‘g‘ri. ${triesLeft} urinish qoldi bu shu darajada.`,
+        });
+
+
 
         const refreshToken = cryptoManeger.refresh.generate({
             id: admin.id,
