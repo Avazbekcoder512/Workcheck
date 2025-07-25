@@ -95,8 +95,9 @@ model LoginBlock {
   id           Int      @id @default(autoincrement())
   username     String?  @db.VarChar(255)
   ipAddress    String?  @db.VarChar(255)
-  blockedUntil DateTime
+  blockedUntil DateTime?
   failLevel    Int      @default(0)
+  attempts     Int      @default(0)
   createdAt    DateTime @default(now()) @db.Timestamp(6)
   updatedAt    DateTime @updatedAt @db.Timestamp(6)
 }
