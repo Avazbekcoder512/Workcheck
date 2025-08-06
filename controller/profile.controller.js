@@ -21,7 +21,8 @@ const profile = async (req, res) => {
                 username: true,
                 image: true,
                 phone: true,
-                role: true
+                role: true,
+                branch: true
             }
         })
 
