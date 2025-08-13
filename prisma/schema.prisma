@@ -20,6 +20,12 @@ enum Role {
   SUPERADMIN
 }
 
+enum workerTytpe {
+  monthly
+  weekly
+  daily
+}
+
 enum GENDER {
   MALE
   FEMALE
@@ -41,23 +47,28 @@ model Admins {
 }
 
 model Workers {
-  id            Int          @id @default(autoincrement())
-  fullname      String       @db.VarChar(400)
-  position      String       @db.VarChar(200)
-  salary        Int          @db.Integer()
-  phone         String       @unique @db.VarChar(20)
-  age           Int          @db.Integer()
-  gender        GENDER
-  passport      String       @db.VarChar(255)
-  branchId      Int?
-  branch        Branch?      @relation(fields: [branchId], references: [id])
-  image         String?      @db.Text
-  image_path    String?      @db.Text
-  face_encoding Json?        @db.JsonB
-  is_active     Boolean      @db.Boolean
-  createdAt     DateTime     @default(now()) @db.Timestamp(6)
-  updatedAt     DateTime     @updatedAt() @db.Timestamp(6)
-  attendance    Attendance[]
+  id          Int          @id @default(autoincrement())
+  fullname    String       @db.VarChar(400)
+  position    String       @db.VarChar(200)
+  type        workerTytpe
+  salary      Int          @db.Integer()
+  phone       String       @unique @db.VarChar(20)
+  gender      GENDER
+  description String       @db.VarChar()
+  branchId    Int?
+  branch      Branch?      @relation(fields: [branchId], references: [id])
+  image       String?      @db.Text
+  image_path  String?      @db.Text
+  is_active   Boolean      @db.Boolean
+  shiftId     Int
+  shift       Shift        @relation(fields: [shiftId], references: [id])
+  dayoffId    Int
+  dayoff      DayOff       @relation(fields: [dayoffId], references: [id])
+  breakId     Int
+  break       Break        @relation(fields: [breakId], references: [id])
+  createdAt   DateTime     @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime     @updatedAt() @db.Timestamp(6)
+  attendance  Attendance[]
 }
 
 model Attendance {
@@ -92,32 +103,37 @@ model LoginAttempt {
 }
 
 model LoginBlock {
-  id           Int      @id @default(autoincrement())
-  username     String?  @db.VarChar(255)
-  ipAddress    String?  @db.VarChar(255)
+  id           Int       @id @default(autoincrement())
+  username     String?   @db.VarChar(255)
+  ipAddress    String?   @db.VarChar(255)
   blockedUntil DateTime?
-  failLevel    Int      @default(0)
-  attempts     Int      @default(0)
-  createdAt    DateTime @default(now()) @db.Timestamp(6)
-  updatedAt    DateTime @updatedAt @db.Timestamp(6)
+  failLevel    Int       @default(0)
+  attempts     Int       @default(0)
+  createdAt    DateTime  @default(now()) @db.Timestamp(6)
+  updatedAt    DateTime  @updatedAt @db.Timestamp(6)
 }
 
-// model Break {
-//   id        Int      @id @default(autoincrement())
-//   name      String   @db.VarChar(255)
-//   startTime DateTime @db.Time()
-//   endTime   DateTime @db.Time()
-// }
+model Break {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  startTime DateTime  @db.Time()
+  endTime   DateTime  @db.Time()
+  lateAllow Int       @default(20)
+  Workers   Workers[]
+}
 
-// model DayOff {
-//   id   Int      @id @default(autoincrement())
-//   name String   @db.VarChar(255)
-//   day  DateTime @db.Date
-// }
+model DayOff {
+  id      Int       @id @default(autoincrement())
+  name    String    @db.VarChar(255)
+  days    DateTime  @db.Date
+  Workers Workers[]
+}
 
-// model Shift {
-//   id        Int      @id @default(autoincrement())
-//   name      String   @db.VarChar(255)
-//   startTime DateTime @db.Time()
-//   endTime   DateTime @db.Time()
-// }
+model Shift {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  startTime DateTime  @db.Time()
+  endTime   DateTime  @db.Time()
+  lateAllow Int       @default(20)
+  Workers   Workers[]
+}
