@@ -116,8 +116,8 @@ model LoginBlock {
 model Break {
   id        Int       @id @default(autoincrement())
   name      String    @db.VarChar(255)
-  startTime DateTime  @db.Time()
-  endTime   DateTime  @db.Time()
+  startTime String  @db.VarChar()
+  endTime   String  @db.VarChar()
   lateAllow Int       @default(20)
   Workers   Workers[]
 }
@@ -132,8 +132,8 @@ model DayOff {
 model Shift {
   id        Int       @id @default(autoincrement())
   name      String    @db.VarChar(255)
-  startTime DateTime  @db.Time()
-  endTime   DateTime  @db.Time()
+  startTime String  @db.VarChar()
+  endTime   String  @db.VarChar()
   lateAllow Int       @default(20)
   Workers   Workers[]
 }
