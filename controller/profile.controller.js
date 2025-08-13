@@ -91,7 +91,6 @@ const updateProfile = async (req, res) => {
             username: value.username || admin.username,
             phone: value.phone || admin.phone,
             password: newPassword,
-            role: value.role || admin.role
         }
 
         if (value.image) {
