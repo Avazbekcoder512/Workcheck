@@ -37,7 +37,7 @@ const createBreak = async (req, res) => {
             }
         })
 
-        return res.status(200).send({
+        return res.status(201).send({
             success: true,
             message: "Tanaffus muvoffaqiyatli yaratildi!"
         })
@@ -69,7 +69,7 @@ const getAllBreak = async (req, res) => {
 const updateBreak = async (req, res) => {
     try {
 
-        const { id } = req.params
+        const id = Number(req.params.id)
 
         if (isNaN(id)) {
             return res.status(400).send({
@@ -77,7 +77,7 @@ const updateBreak = async (req, res) => {
             });
         }
 
-        const breakOff = await prisma.break.findUnique({ where: id })
+        const breakOff = await prisma.break.findUnique({ where: { id } })
 
         if (!breakOff) {
             return res.status(404).send({
@@ -116,7 +116,7 @@ const updateBreak = async (req, res) => {
 
 const deleteBreak = async (req, res) => {
     try {
-        const { id } = req.params
+        const id = Number(req.params.id)
 
         if (isNaN(id)) {
             return res.status(400).send({
@@ -124,7 +124,7 @@ const deleteBreak = async (req, res) => {
             });
         }
 
-        const breakOff = await prisma.break.findUnique({ where: id })
+        const breakOff = await prisma.break.findUnique({ where: { id } })
 
         if (!breakOff) {
             return res.status(404).send({
