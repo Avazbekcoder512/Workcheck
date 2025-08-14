@@ -116,24 +116,33 @@ model LoginBlock {
 model Break {
   id        Int       @id @default(autoincrement())
   name      String    @db.VarChar(255)
-  startTime String  @db.VarChar()
-  endTime   String  @db.VarChar()
+  startTime String    @db.VarChar()
+  endTime   String    @db.VarChar()
   lateAllow Int       @default(20)
   Workers   Workers[]
 }
 
 model DayOff {
-  id      Int       @id @default(autoincrement())
-  name    String    @db.VarChar(255)
-  days    DateTime  @db.Date
+  id      Int          @id @default(autoincrement())
+  name    String       @db.VarChar(255)
   Workers Workers[]
+  dates   DayOffDate[]
+}
+
+model DayOffDate {
+  id       Int    @id @default(autoincrement())
+  date     String @db.Text
+  dayOffId Int
+  dayOff   DayOff @relation(fields: [dayOffId], references: [id])
+
+  @@unique([dayOffId, date])
 }
 
 model Shift {
   id        Int       @id @default(autoincrement())
   name      String    @db.VarChar(255)
-  startTime String  @db.VarChar()
-  endTime   String  @db.VarChar()
+  startTime String    @db.VarChar()
+  endTime   String    @db.VarChar()
   lateAllow Int       @default(20)
   Workers   Workers[]
 }
