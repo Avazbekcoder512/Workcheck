@@ -5,6 +5,7 @@ import profileRouter from './profile/profileRouter.js'
 import workerRouter from './worker/workerRouter.js'
 import branchRouter from './branch/branchRouter.js'
 import breakRouter from './break/breakRouter.js'
+import shiftRouter from './shift/shiftRouter.js'
 
 export const appRouter = (app) => {
     app.use('/', loginRouter)
@@ -14,4 +15,5 @@ export const appRouter = (app) => {
     app.use('/', indetification, workerRouter)
     app.use('/', indetification, branchRouter)
     app.use('/', indetification, breakRouter)
+    app.use('/', indetification, shiftRouter)
 }
