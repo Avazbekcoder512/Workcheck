@@ -6,6 +6,7 @@ import workerRouter from './worker/workerRouter.js'
 import branchRouter from './branch/branchRouter.js'
 import breakRouter from './break/breakRouter.js'
 import shiftRouter from './shift/shiftRouter.js'
+import dayOffRouter from './dayoff/dayOffRouter.js'
 
 export const appRouter = (app) => {
     app.use('/', loginRouter)
@@ -16,4 +17,5 @@ export const appRouter = (app) => {
     app.use('/', indetification, branchRouter)
     app.use('/', indetification, breakRouter)
     app.use('/', indetification, shiftRouter)
+    app.use('/', indetification, dayOffRouter)
 }
