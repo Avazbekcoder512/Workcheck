@@ -33,7 +33,8 @@ const createBreak = async (req, res) => {
             data: {
                 name: value.name,
                 startTime: value.startTime,
-                endTime: value.endTime
+                endTime: value.endTime,
+                lateAllow: value.lateAllow
             }
         })
 
@@ -100,7 +101,8 @@ const updateBreak = async (req, res) => {
             data: {
                 name: value.name || breakOff.name,
                 startTime: value.startTime || breakOff.startTime,
-                endTime: value.endTime || breakOff.endTime
+                endTime: value.endTime || breakOff.endTime,
+                lateAllow: value.lateAllow || breakOff.lateAllow
             }
         })
 
