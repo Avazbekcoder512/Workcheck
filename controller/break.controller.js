@@ -135,11 +135,11 @@ const deleteBreak = async (req, res) => {
             })
         }
 
-        await prisma.break.delete({ where: id })
+        await prisma.break.delete({ where: {id} })
 
         return res.status(200).send({
             success: true,
-            error: 'Tanaffus muvaffaqiyatli oʻchirildi!'
+            message: 'Tanaffus muvaffaqiyatli oʻchirildi!'
         })
 
     } catch (error) {
