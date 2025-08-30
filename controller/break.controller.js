@@ -97,7 +97,7 @@ const updateBreak = async (req, res) => {
         }
 
         await prisma.break.update({
-            where: id,
+            where: { id },
             data: {
                 name: value.name || breakOff.name,
                 startTime: value.startTime || breakOff.startTime,
@@ -135,7 +135,7 @@ const deleteBreak = async (req, res) => {
             })
         }
 
-        await prisma.break.delete({ where: {id} })
+        await prisma.break.delete({ where: { id } })
 
         return res.status(200).send({
             success: true,
