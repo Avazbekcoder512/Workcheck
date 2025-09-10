@@ -4,7 +4,9 @@ import { createDayOffSchema } from "../validator/dayOff/dayoff.js"
 
 const createDayyOff = async (req, res) => {
     try {
-        const { error, value } = createDayOffSchema.validate(req.body)
+        const { error, value } = createDayOffSchema.validate(req.body, {
+            abortEarly: false
+        })
 
         if (error) {
             return res.status(400).send({
