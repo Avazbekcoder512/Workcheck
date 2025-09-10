@@ -87,7 +87,9 @@ const updateBreak = async (req, res) => {
             })
         }
 
-        const { error, value } = updateBreakSchema.validate(req.body,)
+        const { error, value } = updateBreakSchema.validate(req.body, {
+            abortEarly: false
+        })
 
         if (error) {
             return res.status(400).send({
