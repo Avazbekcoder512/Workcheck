@@ -177,7 +177,7 @@ const authentication = async (req, res) => {
         }
 
         const { username, password } = value;
-        const admin = await prisma.admins.findFirst({ where: { username } });
+        const admin = await prisma.admins.findUnique({ where: { username } });
 
         // Blokni aniqlash kaliti
         const key = admin
