@@ -28,7 +28,8 @@
 		"branch_name_required": "Please enter the branch name!",
 		"branchId_string": "Branch ID must be a string!",
 		"branchId_empty": "Branch ID cannot be empty!",
-		"branchId_required": "Branch ID is required!"
+		"branchId_required": "Branch ID is required!",
+		"branchId": "validation.branchId"
 	},
 	"error": {
 		"value": "Please fill in all the fields!",

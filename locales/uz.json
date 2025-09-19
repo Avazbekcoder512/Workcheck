@@ -28,7 +28,8 @@
 		"branch_name_required": "Filial nomini kiriting!",
 		"branchId_string": "FilialIdsini matnda kiriting!",
 		"branchId_empty": "FilialIdsi bo'sh bo'lmasligi kerak!",
-		"branchId_required": "FilialIdsi talab qilinadi!"
+		"branchId_required": "FilialIdsi talab qilinadi!",
+		"branchId": "validation.branchId"
 	},
 	"error": {
 		"value": "Barcha maydonlarni toʻldiring!",
