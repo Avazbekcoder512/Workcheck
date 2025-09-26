@@ -37,6 +37,7 @@ model Admins {
   username   String   @unique @db.VarChar(255)
   password   String   @db.Text
   phone      String   @unique @db.VarChar(20)
+  verifyCode Int?     @unique @db.Integer
   role       Role
   branchId   Int?
   branch     Branch?  @relation(fields: [branchId], references: [id])
