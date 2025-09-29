@@ -1,10 +1,11 @@
+import { cryptoManeger } from "../helper/crypto.js"
 import prisma from "../prisma/setup.js"
 import { checkPhoneSchema, resetPasswordSchema } from "../validator/password/password.validate.js"
 
 const checkPhone = async (req, res) => {
     try {
         const schema = checkPhoneSchema(req)
-        const { error, value } = schema.validate(req.body, {})
+        const { error, value } = schema.validate(req.body, { abortEarly: false })
 
         if (error) {
             return res.status(400).send({
@@ -48,6 +49,7 @@ const checkPhone = async (req, res) => {
         })
 
         return res.status(200).json({
+            id: updatedAdmin.id,
             code: resetCode
         })
     } catch (error) {
@@ -68,13 +70,34 @@ const resetPassword = async (req, res) => {
             });
         }
 
-        const admin = await prisma.admins.findUnique({ where: { verifyCode: value.verifyCode } })
+        const id = value.id
+        const admin = await prisma.admins.findUnique({ where: { id } })
 
         if (!admin) {
-            return res.status(400).json({
-                error: "Tasdiqlash kodi noto'g'ri"
+            return res.status(404).json({
+                error: "Admin topilmadi!"
             })
         }
+
+        if (admin.verifyCode !== value.code) {
+            return res.status(400).json({
+                error: "tasdiqlash kodi noto'g'ri!"
+            })
+        }
+
+        const newPass = await cryptoManeger.pass.hash(value.password)
+
+        const updatePass = await prisma.admins.update({
+            where: { id },
+            data: {
+                password: newPass
+            }
+        })
+
+        return res.status(200).json({
+            message: 'Parol yangilandi!'
+        })
+
 
     } catch (error) {
         throw error
