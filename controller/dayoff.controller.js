@@ -71,32 +71,38 @@ const getAllDayOffs = async (req, res) => {
 
 const deleteDayyOff = async (req, res) => {
     try {
-        const id = Number(req.params.id)
+        const id = Number(req.params.id);
 
         if (isNaN(id)) {
             return res.status(400).send({
                 success: false,
-                error: "Id noto'g'ri formatda!"
-            })
+                error: "Id noto'g'ri formatda!",
+            });
         }
 
-        const dayOff = await prisma.dayOff.findUnique({ where: { id } })
+        const dayOff = await prisma.dayOff.findUnique({ where: { id } });
 
         if (!dayOff) {
             return res.status(404).send({
                 success: false,
-                error: "Dam olish kuni topilmadi!"
-            })
+                error: "Dam olish kuni topilmadi!",
+            });
         }
 
-        await prisma.dayOff.delete({ where: { id } })
+        await prisma.dayOffDate.deleteMany({
+            where: { dayOffId: id },
+        });
+
+        await prisma.dayOff.delete({
+            where: { id },
+        });
 
         return res.status(200).send({
             success: true,
-            message: "Dam olish kuni muvaffaqiyatli oʻchirildi!"
-        })
+            message: "Dam olish kuni muvaffaqiyatli oʻchirildi!",
+        });
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
