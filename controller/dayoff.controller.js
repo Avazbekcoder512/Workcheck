@@ -34,7 +34,7 @@ const createDayyOff = async (req, res) => {
             }
         })
 
-        return res.status(200).send({
+        return res.status(201).send({
             success: true,
             message: "Dam olish kuni muvaffaqiyatli yaratildi!"
         })
