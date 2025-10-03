@@ -11,12 +11,12 @@ export const verifyCodeSchema = (req) => {
                 "string.empty": req.__("validation.phone_empty"),
                 "any.required": req.__("validation.phone_required"),
             }),
-        code: Joi.number().min(6).max(6).trim().required().messages({
-            "number.base": "Tasdiqlash kodini raqamda kiriting!",
-            "number.empty": "Tasdiqlash kodi bo'sh bo'lmasligi kerak!",
-            "number.min":
+        code: Joi.string().min(6).max(6).trim().required().messages({
+            "string.base": "Tasdiqlash kodini raqamda kiriting!",
+            "string.empty": "Tasdiqlash kodi bo'sh bo'lmasligi kerak!",
+            "string.min":
                 "Tasdiqlash kodi {#limit} ta raqamdan kam bo'lmasligi kerak!",
-            "number.max":
+            "string.max":
                 "Tasdiqlash kodi {#limit} ta raqamdan oshmasligi kerak!",
             "any.required": "Tasdiqlash kodini kiritish shart!",
         }),
