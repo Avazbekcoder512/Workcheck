@@ -3,6 +3,7 @@ import prisma from "../prisma/setup.js";
 import {
     checkPhoneSchema,
     resetPasswordSchema,
+    verifyCodeSchema,
 } from "../validator/password/password.validate.js";
 
 const checkPhone = async (req, res) => {
@@ -58,8 +59,46 @@ const checkPhone = async (req, res) => {
         });
 
         return res.status(200).json({
-            id: updatedAdmin.id,
+            phone: updatedAdmin.phone,
             code: resetCode,
+        });
+    } catch (error) {
+        throw error;
+    }
+};
+
+const verifyCode = async (req, res) => {
+    try {
+        const schema = verifyCodeSchema(req);
+        const { error, value } = schema.validate(req.body, {
+            abortEarly: false,
+        });
+
+        if (error) {
+            return res.status(400).send({
+                success: false,
+                error: error.details[0].message,
+            });
+        }
+
+        const admin = await prisma.admins.findUnique({
+            where: { phone: value.phone },
+        });
+
+        if (!admin) {
+            return res.status(404).json({
+                error: "Bunday telefon raqamga ega admin topilmadi!",
+            });
+        }
+
+        if (admin.verifyCode !== value.code) {
+            return res.status(400).json({
+                error: "Tasdiqlash kodi not'g'ri!",
+            });
+        }
+
+        return res.status(200).send({
+            success: true,
         });
     } catch (error) {
         throw error;
@@ -80,18 +119,13 @@ const resetPassword = async (req, res) => {
             });
         }
 
-        const id = value.id;
-        const admin = await prisma.admins.findUnique({ where: { id } });
+        const admin = await prisma.admins.findUnique({
+            where: { phone: value.phone },
+        });
 
         if (!admin) {
             return res.status(404).json({
                 error: "Admin topilmadi!",
-            });
-        }
-
-        if (admin.verifyCode !== value.code) {
-            return res.status(400).json({
-                error: "tasdiqlash kodi noto'g'ri!",
             });
         }
 
@@ -105,6 +139,7 @@ const resetPassword = async (req, res) => {
         });
 
         return res.status(200).json({
+            success: true,
             message: "Parol yangilandi!",
         });
     } catch (error) {
@@ -112,4 +147,4 @@ const resetPassword = async (req, res) => {
     }
 };
 
-export { checkPhone, resetPassword };
+export { checkPhone, verifyCode, resetPassword };
