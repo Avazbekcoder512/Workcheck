@@ -91,9 +91,9 @@ const verifyCode = async (req, res) => {
             });
         }
 
-        if (admin.verifyCode !== value.code) {
+        if (admin.verifyCode != value.code) {
             return res.status(400).json({
-                error: "Tasdiqlash kodi not'g'ri!",
+                error: "Tasdiqlash kodi noto'g'ri!",
             });
         }
 
