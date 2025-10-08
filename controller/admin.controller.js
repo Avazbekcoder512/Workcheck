@@ -108,6 +108,7 @@ export const getAllAdmins = async (req, res) => {
             where: filters.length > 0 ? { OR: filters } : {},
             orderBy: { role: "desc" },
             omit: { password: true },
+            include: { branch: true },
         });
 
         if (admins.length == 0) {
