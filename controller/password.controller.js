@@ -131,8 +131,8 @@ const resetPassword = async (req, res) => {
 
         const newPass = await cryptoManeger.pass.hash(value.password);
 
-        const updatePass = await prisma.admins.update({
-            where: { id },
+        await prisma.admins.update({
+            where: { id: admin.id },
             data: {
                 password: newPass,
             },
