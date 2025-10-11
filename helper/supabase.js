@@ -1,50 +1,43 @@
-import { createClient } from "@supabase/supabase-js"
-import { BUCKET_NAME, SUPABASE_KEY, SUPABASE_URL } from "../config/config.js";
-import { randomUUID } from "crypto";
+const { createClient } = require("@supabase/supabase-js");
+const { SUPABASE_URL, SUPABASE_KEY, BUCKET_NAME } = require("../config/config");
+const { randomUUID } = require("crypto");
 
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const bucketName = BUCKET_NAME;
 
-const supabase = createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-)
-const bucketName = BUCKET_NAME
-
-const storage = {
+exports.storage = {
     upload: async (file) => {
         try {
-            const fileName = `${Date.now()}-${randomUUID()}-${file.originalname}`
-            const { data, error } = await supabase
-                .storage
+            const fileName = `${Date.now()}-${randomUUID()}-${
+                file.originalname
+            }`;
+            const { data, error } = await supabase.storage
                 .from(bucketName)
                 .upload(fileName, file.buffer, {
-                    cacheControl: '3600',
+                    cacheControl: "3600",
                     contentType: file.mimetype,
-                    upsert: false
-                })
+                    upsert: false,
+                });
 
-            if (error) throw error
+            if (error) throw error;
 
-            const { data: urlData } = supabase
-                .storage
+            const { data: urlData } = supabase.storage
                 .from(bucketName)
-                .getPublicUrl(data.path)
+                .getPublicUrl(data.path);
 
             return {
                 path: data.path,
-                url: urlData.publicUrl
-            }
+                url: urlData.publicUrl,
+            };
         } catch (error) {
-            throw error
+            throw error;
         }
     },
 
     delete: async (filePath) => {
-        const { error } = await supabase
-            .storage
+        const { error } = await supabase.storage
             .from(bucketName)
-            .remove([filePath])
-        if (error) throw error
-    }
-}
-
-export default storage
+            .remove([filePath]);
+        if (error) throw error;
+    },
+};
