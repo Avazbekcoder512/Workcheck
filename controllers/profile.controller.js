@@ -1,121 +1,34 @@
-import { cryptoManeger } from "../helper/crypto.js";
-import prisma from "../prisma/setup.js"
-import { updateProfileSchema } from "../validator/profileValidate/updateSchema.js";
+const profileService = require("../services/profile.service");
 
-const profile = async (req, res) => {
+class profileController {
+  async profile(req, res, next) {
     try {
-        const id = Number(req.user.id)
+      const profile = await profileService.profile(req);
 
-        if (isNaN(id)) {
-            return res.status(400).send({
-                success: false,
-                error: req.__('error.id')
-            });
-        }
-
-        const admin = await prisma.admins.findUnique({
-            where: { id },
-            select: {
-                id: true,
-                name: true,
-                username: true,
-                image: true,
-                phone: true,
-                role: true,
-                branch: true
-            }
-        })
-
-        if (!admin) {
-            return res.status(404).send({
-                success: false,
-                error: req.__('error.profile_not_found')
-            })
-        }
-
-        return res.status(200).send({
-            success: true,
-            error: false,
-            admin
-        })
+      return res.status(200).json({
+        success: true,
+        profile,
+      });
     } catch (error) {
-        throw error
+      next(error);
     }
+  }
+
+  async update(req, res, next) {
+    try {
+      const data = req.body;
+      const file = req.file;
+      const profile = await profileService.update(req, data, file);
+
+      return res.status(200).json({
+        success: true,
+        message: "Ma'lumotlaringiz yangilandi!",
+        profile,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
-const updateProfile = async (req, res) => {
-    try {
-        const id = Number(req.user.id)
-
-        if (isNaN(id)) {
-            return res.status(400).send({
-                success: false,
-                error: req.__('error.id')
-            });
-        }
-
-        const admin = await prisma.admins.findUnique({ where: { id } })
-
-        if (!admin) {
-            return res.status(404).send({
-                success: false,
-                error: req.__('error.profile_not_found')
-            })
-        }
-
-        const payload = { ...req.body, image: req.file }
-        const schema = updateProfileSchema(req)
-        const { error, value } = schema.validate(payload, { abortEarly: false })
-
-        if (error) {
-            return req.status(400).send({
-                success: false,
-                error: error.details[0].message
-            })
-        }
-
-        if (!value) {
-            return res.status(400).send({
-                success: false,
-                error: req.__('error.value')
-            })
-        }
-
-        let newPassword = admin.password;
-        if (value.password) {
-            newPassword = await cryptoManeger.pass.hash(value.password)
-        }
-
-        const updatedProfile = {
-            name: value.name || admin.name,
-            username: value.username || admin.username,
-            phone: value.phone || admin.phone,
-            password: newPassword,
-        }
-
-        if (value.image) {
-            if (admin.image_path) {
-                await storage.delete(admin.image_path);
-            }
-            const image = await storage.upload(req.file);
-            updatedProfile.image_path = image.path;
-            updatedProfile.image = image.url;
-        }
-
-        await prisma.admins.update({
-            where: { id },
-            data: updatedProfile
-        })
-
-        return res.status(200).send({
-            success: true,
-            error: false,
-            message: req.__('success.profile')
-        })
-
-    } catch (error) {
-        throw error
-    }
-}
-
-export { profile, updateProfile }
+module.exports = new profileController()

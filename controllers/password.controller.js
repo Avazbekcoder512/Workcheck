@@ -1,150 +1,45 @@
-import { cryptoManeger } from "../helper/crypto.js";
-import prisma from "../prisma/setup.js";
-import {
-    checkPhoneSchema,
-    resetPasswordSchema,
-    verifyCodeSchema,
-} from "../validator/password/password.validate.js";
+const passwordService = require('../services/password.service')
+class passwordController {
+    async checkPhone(req, res, next) {
+        try {
+            const data = req.body
+            const code = await passwordService.checkPhone(req, data)
 
-const checkPhone = async (req, res) => {
-    try {
-        const schema = checkPhoneSchema(req);
-        const { error, value } = schema.validate(req.body, {
-            abortEarly: false,
-        });
-
-        if (error) {
-            return res.status(400).send({
-                success: false,
-                error: error.details[0].message,
-            });
+            return res.status(200).json({
+                success: true,
+                code: code.verifyCode
+            })
+        } catch (error) {
+            next(error)
         }
-
-        const admin = await prisma.admins.findUnique({
-            where: { phone: value.phone },
-        });
-
-        if (!admin) {
-            return res.status(404).json({
-                error: "Bunday telefon raqamga ega admin topilmadi!",
-            });
-        }
-
-        const generateRandomCode = () =>
-            Math.floor(100000 + Math.random() * 900000);
-
-        const resetCode = generateRandomCode();
-
-        // const Token = await getNewToken()
-        // const Phone = user.phoneNumber
-        // const Message = `Limon.uz saytidagi telefon raqamingizni tasdiqlash kodi ${resetCode}`
-
-        // axios.post('https://notify.eskiz.uz/api/message/sms/send', {
-        //     mobile_phone: Phone,
-        //     message: Message,
-        //     from: process.env.Eskiz_From
-        // }, {
-        //     headers: {
-        //         Authorization: `Bearer ${Token}`
-        //     }
-        // })
-        //     .then(res => console.log(res.data))
-        //     .catch(err => console.error('SMS yuborishda xatolik:', err.response?.data || err))
-
-        const updatedAdmin = await prisma.admins.update({
-            where: { id: admin.id },
-            data: {
-                verifyCode: resetCode,
-            },
-        });
-
-        return res.status(200).json({
-            phone: updatedAdmin.phone,
-            code: resetCode,
-        });
-    } catch (error) {
-        throw error;
     }
-};
 
-const verifyCode = async (req, res) => {
-    try {
-        const schema = verifyCodeSchema(req);
-        const { error, value } = schema.validate(req.body, {
-            abortEarly: false,
-        });
+    async verifyCode(req, res, next) {
+        try {
+            const data = req.body
+            const verify = await passwordService.verifyCode(req, data)
 
-        if (error) {
-            return res.status(400).send({
-                success: false,
-                error: error.details[0].message,
-            });
+            return res.status(200).json({
+                success: true
+            })
+        } catch (error) {
+            next(error)
         }
-
-        const admin = await prisma.admins.findUnique({
-            where: { phone: value.phone },
-        });
-
-        if (!admin) {
-            return res.status(404).json({
-                error: "Bunday telefon raqamga ega admin topilmadi!",
-            });
-        }
-
-        if (admin.verifyCode != value.code) {
-            return res.status(400).json({
-                error: "Tasdiqlash kodi noto'g'ri!",
-            });
-        }
-
-        return res.status(200).send({
-            success: true,
-        });
-    } catch (error) {
-        throw error;
     }
-};
 
-const resetPassword = async (req, res) => {
-    try {
-        const schema = resetPasswordSchema(req);
-        const { error, value } = schema.validate(req.body, {
-            abortEarly: false,
-        });
+    async resetPassword (req, res, next) {
+        try {
+            const data = req.body
+            const result = await passwordService.resetPassword(req, data)
 
-        if (error) {
-            return res.status(400).send({
-                success: false,
-                error: error.details[0].message,
-            });
+            return res.status(200).json({
+                success: true,
+                message: "Parol yangilandi!"
+            })
+        } catch (error) {
+            next(error)
         }
-
-        const admin = await prisma.admins.findUnique({
-            where: { phone: value.phone },
-        });
-
-        if (!admin) {
-            return res.status(404).json({
-                error: "Admin topilmadi!",
-            });
-        }
-
-        const newPass = await cryptoManeger.pass.hash(value.password);
-
-        await prisma.admins.update({
-            where: { id: admin.id },
-            data: {
-                password: newPass,
-            },
-        });
-
-        return res.status(200).json({
-            success: true,
-            message: "Parol yangilandi!",
-        });
-    } catch (error) {
-        throw error;
     }
-};
+}
 
-export { checkPhone, verifyCode, resetPassword };
+module.exports = new passwordController()
