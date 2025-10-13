@@ -4,8 +4,8 @@ const { createDayOffSchema } = require("../validator/dayoff.validator");
 
 class dayOffService {
     async create(req, data) {
-        const schema = createDayOffSchema(req)
-        const { error, value } = schema.validate(data, { abortEarly: false })
+        const schema = createDayOffSchema(req);
+        const { error, value } = schema.validate(data, { abortEarly: false });
 
         if (error) {
             const notAllowedErrors = error.details.filter(
@@ -29,53 +29,55 @@ class dayOffService {
             data: {
                 name: value.name,
                 dates: {
-                    create: value.dates.map(date => ({ date }))
-                }
+                    create: value.dates.map((date) => ({ date })),
+                },
             },
             include: {
-                dates: true
-            }
-        })
+                dates: true,
+            },
+        });
 
-        return dayOff
+        return dayOff;
     }
 
     async getAll(req) {
-        const dayOffs = await prisma.dayOff.findMany()
+        const dayOffs = await prisma.dayOff.findMany({
+            include: { dates: true },
+        });
 
         if (!dayOffs || dayOffs.length === 0) {
             throw {
                 status: 404,
-                message: "Dam olish kunlari mavjud emas!"
-            }
+                message: "Dam olish kunlari mavjud emas!",
+            };
         }
 
-        return dayOffs
+        return dayOffs;
     }
 
     async getOne(req, paramsId) {
-        const id = checkId(paramsId)
+        const id = checkId(paramsId);
 
-        const dayOff = await prisma.dayOff.findUnique({ where: { id } })
+        const dayOff = await prisma.dayOff.findUnique({ where: { id } });
 
         if (!dayOff) {
             throw {
                 status: 404,
-                message: "Dam olish kuni mavjud emas!"
-            }
+                message: "Dam olish kuni mavjud emas!",
+            };
         }
 
-        return dayOff
+        return dayOff;
     }
 
     async delete(req, paramsId) {
-        const dayOff = await this.getOne(req, paramsId)
+        const dayOff = await this.getOne(req, paramsId);
 
-        await prisma.dayOffDate.deleteMany({ where: { dayOffId: dayOff.id } })
-        const result = await prisma.dayOff.delete({ where: { id: dayOff.id } })
+        await prisma.dayOffDate.deleteMany({ where: { dayOffId: dayOff.id } });
+        const result = await prisma.dayOff.delete({ where: { id: dayOff.id } });
 
-        return result
+        return result;
     }
 }
 
-module.exports = new dayOffService()
+module.exports = new dayOffService();
