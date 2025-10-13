@@ -35,6 +35,11 @@ class dayOffController {
             const paramsId = req.params.id
 
             const dayOff = await dayoffService.delete(req, paramsId)
+
+            return res.status(200).json({
+                success: true,
+                message: "Dam olish kuni o'chirildi!"
+            })
         } catch (error) {
             next(error)
         }
