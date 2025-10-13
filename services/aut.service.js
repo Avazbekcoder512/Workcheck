@@ -144,16 +144,10 @@ class authService {
             expiredTime: EXPIREDTIME,
         });
 
-        res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            secure: isProduction,
-            sameSite: "None",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
-
         return {
             token,
             role: admin.role,
+            refreshToken,
         };
     }
 }

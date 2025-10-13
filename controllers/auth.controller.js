@@ -9,6 +9,13 @@ class authController {
             const data = req.body;
             const result = await authService.login(req, data);
 
+            res.cookie("refreshToken", result.refreshToken, {
+                httpOnly: true,
+                secure: isProduction,
+                sameSite: "None",
+                maxAge: 7 * 24 * 60 * 60 * 1000,
+            });
+
             return res.status(200).json({
                 success: true,
                 message: "Kirish muvvaffaqiyatli amalga oshdi!",
