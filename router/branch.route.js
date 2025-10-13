@@ -1,32 +1,33 @@
 const { Router } = require("express");
 const branchController = require("../controllers/branch.controller");
+const { roleAccessMiddleware } = require("../middleware/token.middleware");
 
 const router = Router();
 
 router
     .post(
         "/branch/create",
-        authorization("SUPERADMIN", "ADMIN"),
+        roleAccessMiddleware("SUPERADMIN", "ADMIN"),
         branchController.create
     )
     .get(
         "/branches",
-        authorization("SUPERADMIN", "ADMIN"),
+        roleAccessMiddleware("SUPERADMIN", "ADMIN"),
         branchController.getAll
     )
     .get(
         "/branch/:id",
-        authorization("SUPERADMIN", "ADMIN"),
+        roleAccessMiddleware("SUPERADMIN", "ADMIN"),
         branchController.getOne
     )
     .put(
         "/branch/:id/update",
-        authorization("SUPERADMIN", "ADMIN"),
+        roleAccessMiddleware("SUPERADMIN", "ADMIN"),
         branchController.update
     )
     .delete(
         "/branch/:id/delete",
-        authorization("SUPERADMIN", "ADMIN"),
+        roleAccessMiddleware("SUPERADMIN", "ADMIN"),
         branchController.delete
     );
 
