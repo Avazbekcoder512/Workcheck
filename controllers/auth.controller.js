@@ -31,7 +31,7 @@ class authController {
         try {
             const refreshToken = req.cookies.refreshToken;
 
-            if (!refresh) {
+            if (!refreshToken) {
                 throw {
                     status: 403,
                     message: "Refresh token mavjud emas!",
