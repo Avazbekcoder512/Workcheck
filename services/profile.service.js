@@ -6,7 +6,7 @@ const { updateProfileSchema } = require("../validator/profile.validator.");
 
 class profileService {
   async profile(req) {
-    const id = await checkId(req.user.id);
+    const id = checkId(req.user.id);
 
     const admin = await prisma.admins.findUnique({
       where: { id },

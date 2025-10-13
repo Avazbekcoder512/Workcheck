@@ -51,7 +51,7 @@ class adminService {
             };
         }
 
-        const branchId = await checkId(value.branchId);
+        const branchId = checkId(value.branchId);
 
         const branch = await prisma.branch.findUnique({
             where: { id: branchId },
@@ -100,7 +100,7 @@ class adminService {
     }
 
     async getOne(req, paramsId) {
-        const id = await checkId(paramsId);
+        const id = checkId(paramsId);
 
         const admin = await prisma.admins.findUnique({
             where: { id },
@@ -119,7 +119,7 @@ class adminService {
     }
 
     async update(req, paramsId, data, file) {
-        const admin = await this.getOne(paramsId, req);
+        const admin = await this.getOne(req, paramsId);
 
         const schema = adminUpdateSchema(req);
         const { error, value } = schema.validate(data, { abortEarly: false });
@@ -143,7 +143,8 @@ class adminService {
         }
 
         if (value.branchId) {
-            const branchId = await checkId(value.branchId);
+            const branchId = checkId(value.branchId);
+            console.log(typeof branchId);
 
             const branch = await prisma.branch.findUnique({
                 where: { id: branchId },
@@ -186,7 +187,11 @@ class adminService {
         }
 
         const body = {
-            ...value,
+            name: value.name,
+            username: value.username,
+            phone: value.phone,
+            role: value.role,
+            branchId: Number(value.branchId),
         };
 
         if (file) {

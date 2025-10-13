@@ -53,7 +53,7 @@ class branchService {
     }
 
     async getOne(req, paramsId) {
-        const id = await checkId(paramsId);
+        const id = checkId(paramsId);
 
         const branch = await prisma.branch.findUnique({
             where: { id },
