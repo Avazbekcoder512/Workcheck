@@ -78,7 +78,7 @@ exports.cryptoManeger = {
         },
 
         verify: async (password, hash) => {
-            const hashed = await cryptoManeger.pass.hash(
+            const hashed = await this.cryptoManeger.pass.hash(
                 password,
                 hash.split(":")[1]
             );
