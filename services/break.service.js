@@ -62,7 +62,7 @@ class breakService {
     }
 
     async getOne(req, paramsId) {
-        const id = await checkId(paramsId);
+        const id = checkId(paramsId);
 
         const breakOff = await prisma.break.findUnique({ where: { id } });
 

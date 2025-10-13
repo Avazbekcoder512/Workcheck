@@ -1,4 +1,4 @@
-exports.checkId = async (paramsId) => {
+exports.checkId = (paramsId) => {
     const id = Number(paramsId);
     if (isNaN(id)) {
         throw {

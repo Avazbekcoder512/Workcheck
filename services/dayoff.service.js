@@ -54,7 +54,7 @@ class dayOffService {
     }
 
     async getOne(req, paramsId) {
-        const id = await checkId(paramsId)
+        const id = checkId(paramsId)
 
         const dayOff = await prisma.dayOff.findUnique({ where: { id } })
 

@@ -52,7 +52,7 @@ exports.identification = async (req, res, next) => {
     }
 
     if (decode.id) {
-        const id = await checkId(decode.id);
+        const id = checkId(decode.id);
         const admin = await prisma.admins.findUnique({
             where: {
                 id,

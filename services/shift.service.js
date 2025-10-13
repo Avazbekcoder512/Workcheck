@@ -49,7 +49,7 @@ class shiftService {
   }
 
   async getOne(req, paramsId) {
-    const id = await checkId(paramsId);
+    const id = checkId(paramsId);
 
     const shift = await prisma.shift.findUnique({ where: { id } });
 
