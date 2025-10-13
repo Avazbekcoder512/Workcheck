@@ -1,5 +1,6 @@
 const { checkId } = require("../helper/checkId");
 const { cryptoManeger } = require("../helper/crypto");
+const prisma = require("../prisma/setup");
 
 exports.identification = async (req, res, next) => {
     const authHeader = req.headers["authorization"];
