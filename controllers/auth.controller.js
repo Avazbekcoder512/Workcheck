@@ -1,4 +1,4 @@
-const { EXPIREDTIME } = require("../config/config");
+const { EXPIREDTIME, isProduction } = require("../config/config");
 const { checkId } = require("../helper/checkId");
 const { cryptoManeger } = require("../helper/crypto");
 const authService = require("../services/aut.service");
