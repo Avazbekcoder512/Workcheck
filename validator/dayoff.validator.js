@@ -30,7 +30,7 @@ exports.createDayOffSchema = (req) => {
             "string.empty": "Dam olish kuni nomi boʻsh boʻlmasligi kerak!",
             "any.required": "Dam olish kuni nomi kiritilishi shart!",
         }),
-        dates: Joi.array().max(5).items(dateItem).required.messages({
+        dates: Joi.array().max(5).items(dateItem).required().messages({
             "array.max": "Eng ko‘p 5 ta sana kiritish mumkin.",
             "any.required": "Dam olish kunlari sanalari kiritilishi shart!",
         }),
