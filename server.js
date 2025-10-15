@@ -7,6 +7,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const errorHandler = require("./helper/errorHandler");
 const { appRouter } = require("./router/router");
+const prismaErrorHandler = require("./helper/prismaErrorHandler");
 
 const app = express();
 require('./prisma/setup')
@@ -33,6 +34,7 @@ app.set("trust proxy", true);
 
 appRouter(app);
 
+app.use(prismaErrorHandler)
 app.use(errorHandler);
 
 const server = createServer(app);
