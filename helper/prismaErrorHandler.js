@@ -1,4 +1,5 @@
-const { Prisma } = require("@prisma/client");
+// const { Prisma } = require("@prisma/client");
+const prisma = require('../generated/prisma/index.js')
 
 function prismaErrorHandler(err, req, res, next) {
   if (!err) return next();
@@ -6,7 +7,7 @@ function prismaErrorHandler(err, req, res, next) {
   let status = 500;
   let body = { message: "Server xatosi" };
 
-  if (err instanceof Prisma.PrismaClientKnownRequestError) {
+  if (err instanceof prisma.PrismaClientKnownRequestError) {
     switch (err.code) {
       case "P1001":
         status = 503;
@@ -34,14 +35,14 @@ function prismaErrorHandler(err, req, res, next) {
         break;
     }
   }
-  else if (err instanceof Prisma.PrismaClientInitializationError) {
+  else if (err instanceof prisma.PrismaClientInitializationError) {
     status = 500;
     body = {
       message:
         "Prisma client initialization error — konfiguratsiyani tekshiring.",
     };
   }
-  else if (err instanceof Prisma.PrismaClientRustPanicError) {
+  else if (err instanceof prisma.PrismaClientRustPanicError) {
     status = 500;
     body = { message: "Prisma ichki xatosi (Rust panic)." };
   }
@@ -61,9 +62,6 @@ function prismaErrorHandler(err, req, res, next) {
 
   console.error("Prisma/ErrorHandler:", {
     message: err.message,
-    stack: err.stack,
-    code: err.code,
-    meta: err.meta,
   });
 
   return res.status(status).json(body);
