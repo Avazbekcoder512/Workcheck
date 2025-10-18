@@ -14,7 +14,7 @@ exports.createShiftSchema = (req) => {
                 "string.pattern.base":
                     "Boshlanish vaqti HH:MM formatida bo‘lishi kerak!",
                 "string.empty": "Boshlanish vaqti bo‘sh bo‘lishi mumkin emas!",
-                "any.required": "Boshlanish vaqti kiritish shart!",
+                "any.required": "Boshlanish vaqtini kiritish shart!",
             }),
         endTime: Joi.string()
             .pattern(/^([01]\d|2[0-3]):([0-5]\d)$/)
@@ -23,8 +23,16 @@ exports.createShiftSchema = (req) => {
                 "string.pattern.base":
                     "Yakunlanish vaqti HH:MM formatida bo‘lishi kerak!",
                 "string.empty": "Yakunlanish vaqti bo‘sh bo‘lishi mumkin emas!",
-                "any.required": "Yakunlanish vaqti kiritish shart!",
+                "any.required": "Yakunlanish vaqtini kiritish shart!",
             }),
+        lateAllow: Joi.number().min(10).max(30).required().messages({
+            "number.base": "Kech qolish vaqti raqamda kiritilsin!",
+            "number.empty": "Kech qolish vaqti boʻsh boʻlmasligi kerak!",
+            "number.min":
+                "Kech qolish vaqti {#limit} dan kam boʻlmasligi kerak!",
+            "number.max": "Kech qolish vaqti {#limit} dan oshmasligi kerak!",
+            "any.required": "Kech qolish vaqtini kiritish shart!",
+        }),
     });
 };
 
@@ -48,5 +56,12 @@ exports.updateShiftSchema = (req) => {
                     "Yakunlanish vaqti HH:MM formatida bo‘lishi kerak!",
                 "string.empty": "Yakunlanish vaqti bo‘sh bo‘lishi mumkin emas",
             }),
+        lateAllow: Joi.number().min(10).max(30).messages({
+            "number.base": "Kech qolish vaqti raqamda kiritilsin!",
+            "number.empty": "Kech qolish vaqti boʻsh boʻlmasligi kerak!",
+            "number.min":
+                "Kech qolish vaqti {#limit} dan kam boʻlmasligi kerak!",
+            "number.max": "Kech qolish vaqti {#limit} dan oshmasligi kerak!",
+        }),
     });
 };
