@@ -5,31 +5,31 @@ function prismaErrorHandler(err, req, res, next) {
   if (!err) return next();
 
   let status = 500;
-  let body = { message: "Server xatosi" };
+  let body = { error: "Server xatosi" };
 
   if (err instanceof prisma.PrismaClientKnownRequestError) {
     switch (err.code) {
       case "P1001":
         status = 503;
         body = {
-          message: "Maʼlumotlar bazasiga ulanish mumkin emas (DB unreachable).",
+          error: "Maʼlumotlar bazasiga ulanish mumkin emas (DB unreachable).",
         };
         break;
       case "P2002":
         status = 409;
         body = {
-          message: "Unique constraint violated.",
+          error: "Unique constraint violated.",
           meta: { code: err.code, target: err.meta?.target },
         };
         break;
       case "P2025": 
         status = 404;
-        body = { message: "Talab qilingan yozuv topilmadi." };
+        body = { error: "Talab qilingan yozuv topilmadi." };
         break;
       default:
         status = 400;
         body = {
-          message: "So'rovda xato (Prisma error).",
+          error: "So'rovda xato (Prisma error).",
           meta: { code: err.code },
         };
         break;
@@ -38,13 +38,13 @@ function prismaErrorHandler(err, req, res, next) {
   else if (err instanceof prisma.PrismaClientInitializationError) {
     status = 500;
     body = {
-      message:
+      error:
         "Prisma client initialization error — konfiguratsiyani tekshiring.",
     };
   }
   else if (err instanceof prisma.PrismaClientRustPanicError) {
     status = 500;
-    body = { message: "Prisma ichki xatosi (Rust panic)." };
+    body = { error: "Prisma ichki xatosi (Rust panic)." };
   }
   else {
     if (
@@ -53,15 +53,15 @@ function prismaErrorHandler(err, req, res, next) {
       /^P\d{4}$/i.test(err.code)
     ) {
       status = 400;
-      body = { message: "Prisma error", meta: { code: err.code } };
+      body = { error: "Prisma error", meta: { code: err.code } };
     } else {
       status = err.status || 500;
-      body = { message: err.message || "Server xatosi" };
+      body = { error: err.error || "Server xatosi" };
     }
   }
 
   console.error("Prisma/ErrorHandler:", {
-    message: err.message,
+    error: err.error,
   });
 
   return res.status(status).json(body);
