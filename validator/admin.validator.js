@@ -94,6 +94,6 @@ exports.adminUpdateSchema = (req) => {
         branchId: Joi.string().optional().messages({
             "string.base": "Filial matn ko'rinishida bo'lishi kerak!",
             "string.empty": "Filial bo'sh bo'lishi mumkin emas!",
-        }),
+        })
     });
 };

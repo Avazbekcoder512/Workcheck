@@ -59,7 +59,7 @@ class adminController {
 
             return res.status(200).json({
                 success: true,
-                message: "Admin ma'lumotlari muvaffaqiyatli yaratildi!",
+                message: "Admin ma'lumotlari muvaffaqiyatli yangilandi!",
                 updatedAdmin,
             });
         } catch (error) {
