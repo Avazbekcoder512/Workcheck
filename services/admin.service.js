@@ -194,6 +194,11 @@ class adminService {
             branchId: Number(value.branchId),
         };
 
+        if (value.password) {
+            const newPassword = await cryptoManeger.pass.hash(value.password);
+            body.password = newPassword;
+        }
+
         if (file) {
             if (admin.image_path) {
                 await storage.delete(admin.image_path);
