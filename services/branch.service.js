@@ -8,7 +8,7 @@ const {
 class branchService {
     async create(req, data) {
         const schema = createBranchSchema(req);
-        const { error, value } = schema.validate(data, { abortEarly });
+        const { error, value } = schema.validate(data, { abortEarly: false });
 
         if (error) {
             const notAllowedErrors = error.details.filter(
