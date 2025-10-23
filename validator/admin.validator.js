@@ -11,7 +11,7 @@ exports.adminCreateSchema = (req) => {
                 "Ism ko'pi bilan {#limit} ta belgidan iborat bo'lishi kerak!",
             "any.required": "Ism kiritish majburiy!",
         }),
-        username: Joi.string().min(3).max(255).trim().required().messages({
+        username: Joi.string().min(3).max(20).trim().required().messages({
             "string.base":
                 "Foydalanuvchi nomi matn ko'rinishida bo'lishi kerak!",
             "string.empty": "Foydalanuvchi nomi bo'sh bo'lishi mumkin emas!",
